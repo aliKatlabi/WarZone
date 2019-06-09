@@ -22,7 +22,7 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
     private float activeTime=0.1f;
     private float transitionTime;
 
-    public Bullet(float px, float py, GameWorld gw) {
+    Bullet(float px, float py, GameWorld gw) {
         super(px,py,gw,Player.NOP);
         setX(px);
         setY(py);
@@ -31,7 +31,6 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
         setSpawnTime(0);
         setWidth(5f);
         setHeight(5f);
-
 
         setUnitBody( creatBody(BodyDef.BodyType.DynamicBody));
         getUnitBody().setActive(false);

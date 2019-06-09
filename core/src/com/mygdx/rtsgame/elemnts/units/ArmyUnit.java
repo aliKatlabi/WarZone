@@ -57,6 +57,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
     private float healthBarWidth;
     public MoveToAction prevMove;
 
+    private HealthBar healthBar;
     public ArmyUnit(float px, float py, GameWorld gw , Player playrid) {
         //ArmyUnit to Unit or ArmyUnit
         setX(px);
@@ -69,6 +70,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
         setBodyRadius(25f);
         healthBarWidth = 32f;
         setVisible(true);
+        healthBar = new HealthBar(shapeR);
 
     }
 
@@ -80,7 +82,6 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
         this.mouseX = mouseX;
         this.mouseY = mouseY;
-
 
         moving = true;
 
@@ -149,11 +150,6 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
                 bullet = loadBullet( getX()+getWidth()/2, getY()+getHeight()/2, gameWorld);
 
-                /*
-                bullet = loadBullet(
-                        this.getX() + getWidth()/2  + launchPoint * translate(this,enemy).X,
-                        this.getY() + getHeight()/2 +  launchPoint * translate(this,enemy).Y, gameWorld);
-*/
                 gameWorld.spawn(bullet);
                 bullet.moveTo(enemy.getX() + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() / 2, false);
                 ellapsedTime = 0;
@@ -163,7 +159,6 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
             }
         }
     }
-
 
     private boolean inRange(){
         if(enemy!=null){
@@ -181,7 +176,8 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     public void getDamage(float d){
 
-        healthBarWidth=healthBarWidth - d*(healthBarWidth/hp);
+        //healthBarWidth = healthBarWidth - d*(healthBarWidth/hp);
+        healthBar.update(d,hp);
         hp-=d;
 
         if(hp<=0)
@@ -195,12 +191,6 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     }
 
-
-    /*
-    private  Directions enemyDirection(ArmyUnit au){
-
-    }
-*/
 
 
     @Override
@@ -248,7 +238,9 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
                   this.drawDebugBounds(shapeR);
               }
 
-              shapeR.rect(getX() -3f, getY() + getHeight() + 10f, healthBarWidth , 1);
+              healthBar.draw(getX() -3f, getY() + getHeight() + 10f);
+
+              //shapeR.rect(getX() -3f, getY() + getHeight() + 10f, healthBarWidth , 1);
 
           }
       }
@@ -260,39 +252,36 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
         ellapsedTime += delta;
 
-        if(ellapsedTime > spawnTime){///if the army unit exist
-            spawned=true;///set that it is spawned
-
+        if(ellapsedTime > spawnTime) {///if the army unit exist
+            spawned = true;///set that it is spawned
             /////////handle moving and in position vertical movement
-            if(getX() == mouseX && getY()== mouseY){
-                moving =false;
+            if (getX() == mouseX && getY() == mouseY) {
+                moving = false;
             }
-            if(!moving) {
+            if (!moving) {
                 if (ellapsedTime % 3 < 1)
                     staticMove(getX(), getY() + 10);
                 if (ellapsedTime % 3 > 1)
                     staticMove(getX(), getY() - 10);
             }
         }
+            //////enemy state
 
+            if (enemy != null) {
+                if (!enemy.isDestroyed())
+                    shoot();
+                else {
+                    setShoot(false);
+                    enemy = null;
+                }
+            }
+            ////////////this state
 
-        //////enemy state
-
-        if(enemy!=null) {
-            if (!enemy.isDestroyed())
-                shoot();
-            else{
-                setShoot(false);
-
-                enemy=null; }
-        }
-        ////////////this state
-
-        if(this.isDestroyed()){
-            setSpawned(false);
-            if(destroyedSound !=null)
-                destroyedSound.play(volume);
-        }
+            if (this.isDestroyed()) {
+                setSpawned(false);
+                if (destroyedSound != null)
+                    destroyedSound.play(volume);
+            }
 
 
         /*
@@ -302,7 +291,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
 
     @Override
-    public Body creatBody(BodyDef.BodyType type){
+    public Body creatBody(BodyDef.BodyType type ){
 
         Body body ;
         BodyDef bodyDef = new BodyDef();
@@ -310,7 +299,6 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
         bodyDef.type = type;
         bodyDef.position.set(this.getX(), this.getY());
         body = getGameWorld().world.createBody(bodyDef);
-
         return body;
     }
 
@@ -345,6 +333,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
     public void dispose(){
 
         shapeR.dispose();
+
 
     }
 

@@ -132,15 +132,17 @@ public class GameWorld extends Stage implements InputProcessor {
     }
 
     public  void spawn(ArmyUnit p){
-        this.addActor(p);
-        mapRenderer.addUnitToMapRenderer( p);
-        hasUnits=true;
 
-        if ( p.getPlayerId() == Player.PLAYER1) {
+        this.addActor(p);
+        mapRenderer.addUnitToMapRenderer(p);
+        hasUnits = true;
+
+        if (p.getPlayerId() == Player.PLAYER1) {
             currentPlayersUnitsCount++;
-        } else {
+        }else{
             enemyUnitsCount++;
         }
+
 
     }
     private void despawn(ArmyUnit p){

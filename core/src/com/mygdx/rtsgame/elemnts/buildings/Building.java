@@ -17,7 +17,7 @@ import java.util.Iterator;
 
 import static java.lang.Math.abs;
 
-public class Building extends ArmyUnit {
+public abstract class Building extends ArmyUnit {
 
     private Texture  inConstructTexture = new Texture(Gdx.files.internal("buildings/orange defense base.png"));
     private Texture texture=new Texture(Gdx.files.internal("buildings/manufactory02.png"));
@@ -53,10 +53,13 @@ public class Building extends ArmyUnit {
     }
 
 
+    @Override
     public void destroy(){
         gameWorld.world.destroyBody(BuildingBody);
         this.addAction(Actions.removeActor());
     }
+
+    @Override
     public  void getDamage(float d){
 
         healthBarWidth=healthBarWidth - d*(healthBarWidth/hp);

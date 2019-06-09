@@ -8,7 +8,7 @@ import com.mygdx.rtsgame.elemnts.bullets.Bullet;
 
 public interface ArmyUnitTool {
 
-    public Body creatBody(BodyDef.BodyType type);
+    public Body creatBody(BodyDef.BodyType type );
     public Bullet loadBullet(float x, float y, GameWorld gw);
     public void installCircularBody(Body body ,int density,float radius,boolean multiBody);
     public boolean hit( Vector3 mousePos);
