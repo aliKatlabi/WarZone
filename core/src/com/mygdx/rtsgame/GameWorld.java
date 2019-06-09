@@ -44,7 +44,7 @@ public class GameWorld extends Stage implements InputProcessor {
         currentPlayer = Player.PLAYER1;
         currentMap = map;
         buildingInConstruction = Buildings.NOB;
-        world = new World(new Vector2(0,0),false);
+        world = new World(new Vector2(0,0),true);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -143,7 +143,7 @@ public class GameWorld extends Stage implements InputProcessor {
         }
 
     }
-    public void despawn(ArmyUnit p){
+    private void despawn(ArmyUnit p){
         p.destroy();
         mapRenderer.removeUnitFromMapRenderer(p);
 

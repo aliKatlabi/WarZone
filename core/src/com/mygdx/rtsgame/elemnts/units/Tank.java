@@ -10,7 +10,7 @@ import com.mygdx.rtsgame.elemnts.bullets.NeutronBullet;
 
 import static java.lang.Math.max;
 
-public class Tank extends ArmyUnit{
+public final class Tank extends ArmyUnit{
 
     public Tank(float px, float py, GameWorld gw , Player playrid){
         super(px,py,gw,playrid);
@@ -22,13 +22,13 @@ public class Tank extends ArmyUnit{
         setSpawnTime(ArmyUnits.TANK.spawnTime);
         scale =1.1f;
 
-        unitTexture = getGameWorld().assetManager.manager.get(GameAssetManager.armyUnitTexture);
+        unitTexture = GameWorld.assetManager.manager.get(GameAssetManager.armyUnitTexture);
         setBounds(px,py,unitTexture.getWidth(),unitTexture.getHeight());
         //setLaunchPoint( max(4*unitTexture.getWidth()/5,4*unitTexture.getHeight()/5));
 
-        shootingSound   = getGameWorld().assetManager.manager.get(GameAssetManager.tankShootingSound);
-        movingSound     = getGameWorld().assetManager.manager.get(GameAssetManager.tankMovingSound);
-        destroyedSound  = getGameWorld().assetManager.manager.get(GameAssetManager.tankDestroyedSound);
+        shootingSound   = GameWorld.assetManager.manager.get(GameAssetManager.tankShootingSound);
+        movingSound     = GameWorld.assetManager.manager.get(GameAssetManager.tankMovingSound);
+        destroyedSound  = GameWorld.assetManager.manager.get(GameAssetManager.tankDestroyedSound);
 
         setUnitBody(creatBody(BodyDef.BodyType.DynamicBody));
         installCircularBody(getUnitBody(),10,this.getWidth() /2 - 3,true);

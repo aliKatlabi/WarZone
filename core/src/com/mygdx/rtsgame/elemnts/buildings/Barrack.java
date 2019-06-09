@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.Player;
 
-public class Barrack extends Building {
+public  final class Barrack extends Building {
 
     public Barrack(float px, float py, GameWorld gw, Player pid) {
         super(px, py, gw, pid);

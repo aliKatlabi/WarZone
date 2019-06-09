@@ -69,18 +69,14 @@ public class Building extends ArmyUnit {
     }
     @Override
     public boolean hit(Vector3 clickPos){
-        /*
-        System.out.println("click :" +clickPos.x +"  y: "+clickPos.y);
-        System.out.println("getx  :" +getX()+"  y: "+ getY());
-        System.out.println("w :" +getWidth() +"  h: "+getHeight());
-*/
+
         return  Math.hypot(abs(clickPos.x  - (3*DEVIATION + getX() - getWidth()/2))
                 ,abs(clickPos.y - (DEVIATION/3 + getY()+getHeight()/2)))<getBodyRadius();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha){
-       // batch.setProjectionMatrix(gameWorld.getCamera().combined);
+
         if(!isHiden()) {
             healthBar.setProjectionMatrix(gameWorld.getCamera().combined);
             batch.setProjectionMatrix(gameWorld.getCamera().combined);

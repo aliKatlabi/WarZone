@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.assets.GameAssetManager;
 
-public class SuperFireBullet extends Bullet {
+public final class SuperFireBullet extends Bullet {
 
     public SuperFireBullet(float px, float py, GameWorld gw) {
         super(px, py, gw);
 
-        setBullet(getGameWorld().assetManager.manager.get(GameAssetManager.bulletTexture));
+        setBullet(GameWorld.assetManager.manager.get(GameAssetManager.bulletTexture));
         setDamage(Bullets.SUPERFIRE_B.damage);
         setVelocity(Bullets.SUPERFIRE_B.velocity);
     }
@@ -19,7 +19,7 @@ public class SuperFireBullet extends Bullet {
     }
 
     @Override
-    public void transition(Batch batch, float ellapsedTime) {
+    public void transEffect(Batch batch, float ellapsedTime) {
 
     }
 }

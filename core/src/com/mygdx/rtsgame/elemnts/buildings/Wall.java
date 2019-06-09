@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.Player;
 
-public class Wall  extends Building {
+public final class Wall  extends Building {
 
     public Wall(float px, float py, GameWorld gw, Player pid) {
         super(px, py, gw, pid);

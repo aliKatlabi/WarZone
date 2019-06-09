@@ -65,10 +65,8 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
             getUnitBody().setTransform(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, 0);
 
             if(ellapsedTime<transitionTime)
-                transition(batch,ellapsedTime);
+                transEffect(batch,ellapsedTime);
 
-            if(isCollided())
-                collide();
 
     }
 
@@ -83,10 +81,12 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
         if(ellapsedTime > activeTime && !collided){
             getUnitBody().setActive(true);
         }
+
+        collide(collided);
+
         for (Iterator<Action> iter = this.getActions().iterator(); iter.hasNext(); ) {
             iter.next().act(delta);
         }
-
 
     }
 
@@ -97,16 +97,21 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
     }
 
     @Override
-    public void transition(Batch batch , float ellapsedTime) {
+    public void transEffect(Batch batch , float ellapsedTime) {
 
 
     }
 
     @Override
-    public void collide() {
+    public void collide(boolean collided) {
 
+        if(collided)
+            getUnitBody().setActive(false);
 
-        getUnitBody().setActive(false);
+    }
+
+    @Override
+    public void shatter(boolean condition) {
 
     }
 

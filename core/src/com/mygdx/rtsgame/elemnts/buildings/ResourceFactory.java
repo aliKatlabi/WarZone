@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.Player;
 
-public class ResourceFactory extends Building {
+public final  class ResourceFactory extends Building {
 
     public final static int price = Buildings.RESOURSEFACTORY.price;
     private float moneyTime=0;

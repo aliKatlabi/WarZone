@@ -12,7 +12,7 @@ import com.mygdx.rtsgame.elemnts.bullets.SuperFireBullet;
 
 import static java.lang.Math.max;
 
-public class SuperSoldier extends ArmyUnit {
+public final class SuperSoldier extends ArmyUnit {
 
     public SuperSoldier(float px, float py, GameWorld gw, Player playrid) {
         super(px, py, gw, playrid);
@@ -24,14 +24,14 @@ public class SuperSoldier extends ArmyUnit {
         setSpawnTime(ArmyUnits.SUPER_SOLDIER.spawnTime);
         scale = 0.8f;
 
-        unitTexture     = getGameWorld().assetManager.manager.get(GameAssetManager.soldierTexture);
+        unitTexture     = GameWorld.assetManager.manager.get(GameAssetManager.soldierTexture);
         setBounds(px, py, unitTexture.getWidth()-5, unitTexture.getHeight()-5);
         //setLaunchPoint( max(2*unitTexture.getWidth()/3,2*unitTexture.getHeight()/3));
 
         shootingSound = Gdx.audio.newSound(Gdx.files.internal("data/sounds/9_mm_gunshot-mike-koenig-123.mp3"));
 
-        movingSound     = getGameWorld().assetManager.manager.get(GameAssetManager.movingSound);
-        destroyedSound  = getGameWorld().assetManager.manager.get(GameAssetManager.destroyedSound);
+        movingSound     = GameWorld.assetManager.manager.get(GameAssetManager.movingSound);
+        destroyedSound  = GameWorld.assetManager.manager.get(GameAssetManager.destroyedSound);
 
         setUnitBody( creatBody(BodyDef.BodyType.DynamicBody));
         this.installCircularBody(getUnitBody(),10,getWidth()/2,true);

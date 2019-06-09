@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.assets.GameAssetManager;
 
-public class NeutronBullet extends Bullet{
+public final class NeutronBullet extends Bullet{
 
     private Texture effect;
 
     public NeutronBullet(float px, float py, GameWorld gw) {
         super(px, py, gw);
-        setBullet(getGameWorld().assetManager.manager.get(GameAssetManager.NeutronBulletTexture));
+        setBullet(GameWorld.assetManager.manager.get(GameAssetManager.NeutronBulletTexture));
         setDamage(Bullets.NEUTRON_B.damage);
         setVelocity(Bullets.NEUTRON_B.velocity);
         setExistanceTime(Bullets.NEUTRON_B.existenceTime);
@@ -20,12 +20,12 @@ public class NeutronBullet extends Bullet{
         setWidth(7f);
         setHeight(7f);
 
-        effect = getGameWorld().assetManager.manager.get(GameAssetManager.bulletTexture);
+        effect = GameWorld.assetManager.manager.get(GameAssetManager.bulletTexture);
 
     }
 
     @Override
-    public void transition(Batch batch, float ellapsedTime) {
+    public void transEffect(Batch batch, float ellapsedTime) {
 
         batch.end();
         batch.begin();
