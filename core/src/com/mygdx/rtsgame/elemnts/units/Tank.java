@@ -5,15 +5,12 @@ import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.Player;
 import com.mygdx.rtsgame.assets.GameAssetManager;
 import com.mygdx.rtsgame.elemnts.bullets.Bullet;
-import com.mygdx.rtsgame.elemnts.bullets.FireBullet;
 import com.mygdx.rtsgame.elemnts.bullets.NeutronBullet;
-
-import static java.lang.Math.max;
 
 public final class Tank extends ArmyUnit{
 
-    public Tank(float px, float py, GameWorld gw , Player playrid){
-        super(px,py,gw,playrid);
+    public Tank(float px, float py, Player playrid){
+        super(px,py,playrid);
 
         setHp(ArmyUnits.TANK.HP);
         setRange(ArmyUnits.TANK.range);
@@ -36,9 +33,9 @@ public final class Tank extends ArmyUnit{
 
     }
     @Override
-    public Bullet loadBullet(float x, float y, GameWorld gw) {
+    public Bullet loadBullet(float x, float y) {
 
-        return new NeutronBullet(x,y,gw);
+        return new NeutronBullet(x,y);
     }
 
 }

@@ -30,49 +30,61 @@ public class GameWorld extends Stage implements InputProcessor {
     private TiledMap gameMap;
     private GameMapRenderer mapRenderer;
     private OrthographicCamera camera ;
-    private float HIT_AMPLIFICATION=50;
     private int resorces=1000000;
     public boolean hasUnits = false;
-    public static int currentPlayersUnitsCount=0;
-    public static int enemyUnitsCount=0;
-    private float LAUNCH_POINT = 10f;
-    public static GameAssetManager assetManager;
-    public GameWorld (Maps map ){
 
-        assetManager = new GameAssetManager();
 
-        currentPlayer = Player.PLAYER1;
-        currentMap = map;
-        buildingInConstruction = Buildings.NOB;
-        world = new World(new Vector2(0,0),true);
+    public   static      int currentPlayersUnitsCount=0;
+    public   static      int enemyUnitsCount=0;
+    public   static      GameAssetManager assetManager = GameAssetManager.getInstance();
+    private  static      GameWorld SINGLE_INS = null;
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        gameMap = new TmxMapLoader().load(map.path());
-        mapRenderer = new GameMapRenderer(gameMap,world);
-        camera.update();
-        //////////////////////
-        world.setContactListener(myContactLisinter());
-        ////////debug
+    private GameWorld (){ }
 
-        assetManager.load();
-        assetManager.manager.finishLoading();
 
+    public static GameWorld getInstance()
+    {
+
+        if(SINGLE_INS == null)
+        {
+            SINGLE_INS=new GameWorld();
+        }
+
+        return SINGLE_INS;
     }
 
+    public void loadMap(Maps map)
+    {
+
+        if(SINGLE_INS != null)
+        {
+            world = new World(new Vector2(0,0),true);
+            camera = new OrthographicCamera();
+            camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            camera.update();
+            currentMap = map;
+            gameMap = new TmxMapLoader().load(map.path());
+            mapRenderer = new GameMapRenderer(SINGLE_INS.gameMap, SINGLE_INS.world);
+            world.setContactListener(SINGLE_INS.myContactListener());
+
+        }
+    }
 
     public void worldRender() {
 
         for (ArmyUnit u : getArmyUnits()) {
 
             //////////de-spawn all units that are set destroyed
-            if (u.isDestroyed())
+            if (!u.isSpawned()&&u.isDestroyed())
                 despawn(u);
 
-            ////////OUTSIDE / INSIDE CAMERA RENDERER //////////////////
+            ////////OUTSIDE / INSIDE CAMERA RENDERER ///////////////
+
+
             if(!(abs(u.getX()-camera.position.x)<  100  +Gdx.graphics.getWidth()/2 &&
                     abs(u.getY()-camera.position.y)<100 + Gdx.graphics.getHeight()/2)){
                 ///outside the screen
+
 
                 u.setVisible(true);   /////dont DRAW when units are outside the screen to save CPU power
                 u.setVolume(0.05f);////lower units volume
@@ -91,15 +103,19 @@ public class GameWorld extends Stage implements InputProcessor {
     public TiledMap getGameMap() {
         return gameMap;
     }
+
     public void setGameMap(TiledMap gameMap) {
         this.gameMap = gameMap;
     }
+
     public OrthographicCamera getCamera() {
         return camera;
     }
 
     public Array<ArmyUnit> getArmyUnits() {
+
         Array<ArmyUnit> tmp = new Array<ArmyUnit>();
+
         for (Actor a : this.getActors()){
             if(a instanceof ArmyUnit)
                 tmp.add((ArmyUnit)a);
@@ -107,6 +123,7 @@ public class GameWorld extends Stage implements InputProcessor {
         return tmp;
     }
     public Array<Building> getBuildings() {
+
         Array<Building> tmp = new Array<Building>();
 
         for (Actor a : this.getActors()){
@@ -117,8 +134,8 @@ public class GameWorld extends Stage implements InputProcessor {
     }
 
 
-    public void build(Building building){
-
+    public void build(Building building)
+    {
         this.addActor(building);
         hasUnits=true;
         mapRenderer.addUnitToMapRenderer(building);
@@ -131,39 +148,52 @@ public class GameWorld extends Stage implements InputProcessor {
 
     }
 
-    public  void spawn(ArmyUnit p){
+    public void spawn(ArmyUnit p){
+
 
         this.addActor(p);
         mapRenderer.addUnitToMapRenderer(p);
         hasUnits = true;
 
         if (p.getPlayerId() == Player.PLAYER1) {
-            currentPlayersUnitsCount++;
+            if(currentPlayersUnitsCount++>0)
+                hasUnits=true;
+
         }else{
-            enemyUnitsCount++;
+            if(enemyUnitsCount++>0)
+                hasUnits=true;
         }
-
-
     }
+
     private void despawn(ArmyUnit p){
         p.destroy();
         mapRenderer.removeUnitFromMapRenderer(p);
 
         if (p.getPlayerId() == Player.PLAYER1) {
-            currentPlayersUnitsCount--;
+            if(currentPlayersUnitsCount--==0)
+                hasUnits=false;
         } else {
-            enemyUnitsCount--;
+            if(enemyUnitsCount--==0)
+                hasUnits=false;
         }
     }
 
-    public void disposeAll(){
-        this.dispose();
-        assetManager.dispose();
-        mapRenderer.dispose();
-        gameMap.dispose();
+    public void dispose(){
+
+        if(SINGLE_INS!=null)
+        {
+
+            for (ArmyUnit u : getArmyUnits())
+                u.dispose();
+
+            getArmyUnits().clear();
+            assetManager.manager.clear();
+            mapRenderer.dispose();
+            gameMap.dispose();
+        }
 
     }
-    private ContactListener myContactLisinter() {
+    private ContactListener myContactListener() {
 
         return new ContactListener() {
             @Override
@@ -277,15 +307,6 @@ public class GameWorld extends Stage implements InputProcessor {
 
 
 
-
-
-
-
-
-
-
-
-
     ////////////////////
 
 
@@ -301,9 +322,7 @@ public class GameWorld extends Stage implements InputProcessor {
         return buildingInConstruction;
     }
 
-    public void setBuildingInConstruction(Buildings buildingInConstruction) {
-        this.buildingInConstruction = buildingInConstruction;
-    }
+    public void setBuildingInConstruction(Buildings buildingInConstruction) { this.buildingInConstruction = buildingInConstruction; }
 
     public World getWorld() {
         return world;
@@ -325,9 +344,7 @@ public class GameWorld extends Stage implements InputProcessor {
         return currentPlayersUnitsCount;
     }
 
-    public  void setCurrentPlayersUnitsCount(int currentPlayersUnitsCount) {
-        GameWorld.currentPlayersUnitsCount = currentPlayersUnitsCount;
-    }
+    public  void setCurrentPlayersUnitsCount(int currentPlayersUnitsCount) { GameWorld.currentPlayersUnitsCount = currentPlayersUnitsCount; }
 
     public  int getEnemyUnitsCount() {
         return enemyUnitsCount;

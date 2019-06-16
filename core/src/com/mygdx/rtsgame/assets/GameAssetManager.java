@@ -1,20 +1,30 @@
 package com.mygdx.rtsgame.assets;
-
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.sun.org.apache.xpath.internal.operations.Variable;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public class GameAssetManager {
 
 
+
     public AssetManager manager = new AssetManager();
 
+    private static ArrayList<AssetDescriptor> ADList = new ArrayList<AssetDescriptor>();
+
+
+    private static GameAssetManager SINGLE_INS = null;
     ////texture
+
     public static final AssetDescriptor<Texture> armyUnitTexture =
             new AssetDescriptor<Texture>("data/sprites/tank/eyelander.png", Texture.class);
+
+
     public static final AssetDescriptor<Texture> soldierTexture =
             new AssetDescriptor<Texture>("data/sprites/soldier/eyelander1.png", Texture.class);
 
@@ -24,7 +34,6 @@ public class GameAssetManager {
 
     public static final AssetDescriptor<Texture> NeutronBulletTexture =
             new AssetDescriptor<Texture>("data/sprites/bullets/blue-fire-15.png", Texture.class);
-
 
     //sound
     public static final AssetDescriptor<Sound> gameSound =
@@ -50,34 +59,39 @@ public class GameAssetManager {
     public static final AssetDescriptor<Skin> tracerSkin =
             new AssetDescriptor<Skin>("skins/tracer/skin/tracer-ui.json", Skin.class);
 
+    private GameAssetManager() throws IllegalAccessException{
+
+        for(Field f : this.getClass().getFields()){
+
+            if((f.get(this)) instanceof AssetDescriptor){
+
+                ADList.add(((AssetDescriptor)(f.get(this))));
+            }
+
+        }
+    }
+
+    public static GameAssetManager getInstance()
+    {
+
+        if(SINGLE_INS == null){
+            try {
+                SINGLE_INS = new GameAssetManager();
+            }catch (IllegalAccessException iae ){
+                iae.printStackTrace();
+            }
+        }
+        return SINGLE_INS;
+    }
 
     public void load()
     {
-        //texture
-        manager.load(armyUnitTexture);
-        manager.load(soldierTexture);
-
-        //bulltes
-        manager.load(bulletTexture);
-        manager.load(NeutronBulletTexture);
-
-        //sound
-        manager.load(shootingSound);
-        manager.load(movingSound);
-        manager.load(destroyedSound);
-
-        manager.load(tankShootingSound);
-        manager.load(tankMovingSound);
-        manager.load(tankDestroyedSound);
-        manager.load(shootingSound);
-
-
-        //skin
-
-        manager.load(tracerSkin);
-        manager.load(composerSkin);
+        for(AssetDescriptor ad : ADList){
+            manager.load(ad);
+        }
 
     }
+
 
     public void dispose()
     {

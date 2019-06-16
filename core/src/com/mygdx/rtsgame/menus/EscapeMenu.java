@@ -15,24 +15,23 @@ public class EscapeMenu extends Table {
     private GameWorld gameWorld;
     private GameScreen gameScreen;
     private Skin skin = new Skin(Gdx.files.internal("skins/skin-composer/skin/skin-composer-ui.json"));
-    private float BUTTONHIEGHT=20f;
-    private float BUTTONWIDTH=100f;
+    private static final float BUTTON_HEIGHT=20f;
+    private static final float BUTTON_WIDTH=100f;
 
     public EscapeMenu(final GameWorld gw , GameScreen gs){
         gameScreen = gs;
         gameWorld = gw ;
-
         this.setFillParent(true);
         this.left().top();
-        this.add(mainMenu()).padTop(20).padLeft(10).width(BUTTONWIDTH-20).height(BUTTONHIEGHT);
+        this.add(mainMenu()).padTop(20).padLeft(10).width(BUTTON_WIDTH-20).height(BUTTON_HEIGHT);
         row();
-        this.add(exitButton()).padTop(20).padLeft(10).width(BUTTONWIDTH-20).height(BUTTONHIEGHT);
+
 
 
 
     }
 
-    TextButton mainMenu(){
+    private TextButton mainMenu(){
         gameScreen.clearSelection();
         TextButton b = new TextButton("Menu", skin);
 
@@ -47,18 +46,5 @@ public class EscapeMenu extends Table {
 
         return b;
     }
-    public TextButton exitButton(){
 
-        TextButton b1 = new TextButton("Exit",skin);
-        b1.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-
-                Gdx.app.exit();
-
-
-            }
-        });
-        return b1;
-    }
 }

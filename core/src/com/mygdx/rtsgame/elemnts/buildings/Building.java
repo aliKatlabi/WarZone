@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.Player;
 import com.mygdx.rtsgame.elemnts.units.ArmyUnit;
+import com.mygdx.rtsgame.elemnts.units.HealthBar;
 
 import java.util.Iterator;
 
@@ -28,18 +29,18 @@ public abstract class Building extends ArmyUnit {
     private Player playerId;
     private float ellapsedTime=0;
     private float constructionTime;
-    private   boolean destroyed = false;
+    private boolean destroyed = false;
     private boolean constructed=false;
-    GameWorld gameWorld;
+    private GameWorld gameWorld=GameWorld.getInstance();
     private Body BuildingBody;
-    private ShapeRenderer healthBar;
-    private float DEVIATION = 50f;
-    private float healthBarWidth;
+    private ShapeRenderer shapeRenderer;
+    private static final float DEVIATION = 50f;
 
-    Building(float px, float py, GameWorld gw,Player pid){
-        healthBar = new ShapeRenderer();
-        healthBar.setAutoShapeType(true);
-        gameWorld = gw;
+    private HealthBar healthBar;
+
+    Building(float px, float py, Player pid){
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setAutoShapeType(true);
         playerId =pid;
         scale = 0.28f;
         setHeight(getHeight()*scale);
@@ -47,9 +48,9 @@ public abstract class Building extends ArmyUnit {
         setBounds(px,py,texture.getWidth()*scale,texture.getHeight()*scale);
         setBodyRadius(50f);
         setBuildingBody(creatBody(BodyDef.BodyType.StaticBody));
-        installCircularBody(getBuildingBody(),1000,this.getWidth() /4 ,false);
-        healthBarWidth=96f;
+        installCircularBody(getBuildingBody(),1000,this.getWidth() /4 ,true);
 
+        healthBar =new HealthBar(shapeRenderer,96f);
     }
 
 
@@ -60,13 +61,15 @@ public abstract class Building extends ArmyUnit {
     }
 
     @Override
-    public  void getDamage(float d){
+    public  void getDamage(float damage){
 
-        healthBarWidth=healthBarWidth - d*(healthBarWidth/hp);
-        hp-=d;
+       // healthBarWidth=healthBarWidth - d*(healthBarWidth/hp);
+        healthBar.update(damage,hp);
+        hp-=damage;
 
         if(hp<=0) {
             setDestroyed(true);
+            setSpawned(false);
             destroyedSound.play(0.45f);
         }
     }
@@ -80,14 +83,13 @@ public abstract class Building extends ArmyUnit {
     @Override
     public void draw(Batch batch, float parentAlpha){
 
-        if(!isHiden()) {
-            healthBar.setProjectionMatrix(gameWorld.getCamera().combined);
+            shapeRenderer.setProjectionMatrix(gameWorld.getCamera().combined);
             batch.setProjectionMatrix(gameWorld.getCamera().combined);
 
-            healthBar.end();
-            healthBar.begin();
+            shapeRenderer.end();
+            shapeRenderer.begin();
 
-            healthBar.rect(getX() + getWidth()/3, getY() + getHeight(), healthBarWidth, 1);
+            healthBar.draw(getX() + getWidth()/3, getY() + getHeight());
 
             batch.end();
             batch.begin();
@@ -103,8 +105,9 @@ public abstract class Building extends ArmyUnit {
                         this.getHeight(), this.getScaleX(), this.getScaleY(), this.getRotation(), 0, 0,
                         getTexture().getWidth(), getTexture().getHeight(), false, false);
             }
-        }
+
     }
+
     @Override
     public void act(float delta) {
 
@@ -227,15 +230,6 @@ public abstract class Building extends ArmyUnit {
         BuildingBody = buildingBody;
     }
 
-    @Override
-    public ShapeRenderer getShapeR() {
-        return healthBar;
-    }
-
-    @Override
-    public void setShapeR(ShapeRenderer shapeR) {
-        this.healthBar = shapeR;
-    }
 
     public boolean isConstructed() {
         return constructed;

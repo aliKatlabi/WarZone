@@ -1,15 +1,13 @@
 package com.mygdx.rtsgame.elemnts.bullets;
+
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.Player;
 import com.mygdx.rtsgame.elemnts.units.ArmyUnit;
-
-import java.util.Iterator;
-
 
 public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
 
@@ -17,16 +15,15 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
     private boolean collided=false;
     public float damage;
     private float velocity;
-    private float ellapsedTime = 0;
-    private float existanceTime=2f;
-    private float activeTime=0.1f;
+    private float elapsedTime = 0;
+    private float existenceTime=2f;
+    private static final float activeTime=0.1f;
     private float transitionTime;
 
-    Bullet(float px, float py, GameWorld gw) {
-        super(px,py,gw,Player.NOP);
+    Bullet(float px, float py) {
+        super(px,py,Player.NOP);
         setX(px);
         setY(py);
-        this.setGameWorld(gw);
         setHp(0);
         setSpawnTime(0);
         setWidth(5f);
@@ -63,8 +60,8 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
 
             getUnitBody().setTransform(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, 0);
 
-            if(ellapsedTime<transitionTime)
-                transEffect(batch,ellapsedTime);
+            if(elapsedTime<transitionTime)
+                transEffect(batch,elapsedTime);
 
 
     }
@@ -72,28 +69,23 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
     @Override
     public void act(float delta) {
 
-        ellapsedTime += delta;
+        elapsedTime += delta;
 
-        if(ellapsedTime > existanceTime){
+        if(elapsedTime > existenceTime){
             destroy();
         }
-        if(ellapsedTime > activeTime && !collided){
+        if(elapsedTime > activeTime && !collided){
             getUnitBody().setActive(true);
         }
 
-        collide(collided);
+        shatter(collided);
 
-        for (Iterator<Action> iter = this.getActions().iterator(); iter.hasNext(); ) {
-            iter.next().act(delta);
+        for (Action a:getActions()) {
+            a.act(delta);
+
         }
-
     }
 
-
-    @Override
-    public void fired() {
-
-    }
 
     @Override
     public void transEffect(Batch batch , float ellapsedTime) {
@@ -102,31 +94,29 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
     }
 
     @Override
-    public void collide(boolean collided) {
+    public void shatter(boolean collided) {
 
         if(collided)
             getUnitBody().setActive(false);
 
     }
 
-    @Override
-    public void shatter(boolean condition) {
-
-    }
 
     @Override
     public void destroy() {
 
         this.setVisible(false);
         this.setDestroyed(true);
+        this.setSpawned(false);
     }
 
 
 //////////////////////////////////////
-    private boolean isCollided() {
+    /*
+    public boolean isCollided() {
         return collided;
     }
-
+*/
     public void setCollided(boolean collided) {
         this.collided = collided;
     }
@@ -134,7 +124,6 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
     public void setBullet(Texture bullet) {
         this.bullet = bullet;
     }
-
 
     void setDamage(float damage) {
         this.damage = damage;
@@ -144,16 +133,8 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
         this.velocity = velocity;
     }
 
-    protected float getExistanceTime() {
-        return existanceTime;
-    }
-
-    void setExistanceTime(float existanceTime) {
-        this.existanceTime = existanceTime;
-    }
-
-    protected float getTransitionTime() {
-        return transitionTime;
+    void setExistenceTime(float existenceTime) {
+        this.existenceTime = existenceTime;
     }
 
     void setTransitionTime(float transitionTime) {

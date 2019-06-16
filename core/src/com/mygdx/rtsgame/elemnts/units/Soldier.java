@@ -1,4 +1,5 @@
 package com.mygdx.rtsgame.elemnts.units;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.rtsgame.GameWorld;
@@ -7,15 +8,12 @@ import com.mygdx.rtsgame.assets.GameAssetManager;
 import com.mygdx.rtsgame.elemnts.bullets.Bullet;
 import com.mygdx.rtsgame.elemnts.bullets.FireBullet;
 
-import static java.lang.Math.max;
-
 public final class Soldier extends ArmyUnit {
-    public Soldier(float px, float py, GameWorld gw, Player playrid) {
-        super(px, py, gw, playrid);
+    public Soldier(float px, float py,  Player playrid) {
+        super(px, py,  playrid);
 
         setHp(ArmyUnits.SOLDIER.HP);
         setRange(ArmyUnits.SOLDIER.range);
-
         setShootingSpeed(ArmyUnits.SOLDIER.fireRate);
         setMoveSpeed(ArmyUnits.SOLDIER.moveSpeed);
         setSpawnTime(ArmyUnits.SOLDIER.spawnTime);
@@ -37,8 +35,9 @@ public final class Soldier extends ArmyUnit {
     }
 
     @Override
-    public Bullet loadBullet(float x, float y, GameWorld gw) {
-        return new FireBullet(x,y,gw);
+    public Bullet loadBullet(float x, float y)
+    {
+        return new FireBullet(x,y);
     }
 
 }

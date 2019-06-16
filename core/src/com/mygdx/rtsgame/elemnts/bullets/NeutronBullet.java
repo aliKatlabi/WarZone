@@ -8,13 +8,14 @@ import com.mygdx.rtsgame.assets.GameAssetManager;
 public final class NeutronBullet extends Bullet{
 
     private Texture effect;
+    private float e =0f;
 
-    public NeutronBullet(float px, float py, GameWorld gw) {
-        super(px, py, gw);
+    public NeutronBullet(float px, float py) {
+        super(px, py);
         setBullet(GameWorld.assetManager.manager.get(GameAssetManager.NeutronBulletTexture));
         setDamage(Bullets.NEUTRON_B.damage);
         setVelocity(Bullets.NEUTRON_B.velocity);
-        setExistanceTime(Bullets.NEUTRON_B.existenceTime);
+        setExistenceTime(Bullets.NEUTRON_B.existenceTime);
         setTransitionTime(Bullets.NEUTRON_B.transitionTime);
 
         setWidth(7f);
@@ -27,13 +28,6 @@ public final class NeutronBullet extends Bullet{
     @Override
     public void transEffect(Batch batch, float ellapsedTime) {
 
-        batch.end();
-        batch.begin();
 
-        batch.draw(effect, this.getX(), this.getY(), this.getOriginX(), this.getOriginY(), this.getWidth(),
-                this.getHeight(), this.getScaleX(), this.getScaleY(), this.getRotation()*3, 1, 1,
-                effect.getWidth()/2, effect.getHeight()/2, false, false);
-
-        setBounds(this.getX(), this.getY(),effect.getWidth()*ellapsedTime/15f, effect.getHeight()*ellapsedTime/13f);
     }
 }

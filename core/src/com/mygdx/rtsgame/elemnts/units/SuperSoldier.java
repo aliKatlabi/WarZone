@@ -11,8 +11,8 @@ import com.mygdx.rtsgame.elemnts.bullets.SuperFireBullet;
 
 public final class SuperSoldier extends ArmyUnit {
 
-    public SuperSoldier(float px, float py, GameWorld gw, Player playrid) {
-        super(px, py, gw, playrid);
+    public SuperSoldier(float px, float py,  Player playrid) {
+        super(px, py, playrid);
 
         setHp(ArmyUnits.SUPER_SOLDIER.HP);
         setRange(ArmyUnits.SUPER_SOLDIER.range);
@@ -20,7 +20,6 @@ public final class SuperSoldier extends ArmyUnit {
         setMoveSpeed(ArmyUnits.SUPER_SOLDIER.moveSpeed);
         setSpawnTime(ArmyUnits.SUPER_SOLDIER.spawnTime);
         scale = 0.8f;
-
         unitTexture     = GameWorld.assetManager.manager.get(GameAssetManager.soldierTexture);
         setBounds(px, py, unitTexture.getWidth()-5, unitTexture.getHeight()-5);
         shootingSound = Gdx.audio.newSound(Gdx.files.internal("data/sounds/9_mm_gunshot-mike-koenig-123.mp3"));
@@ -34,7 +33,8 @@ public final class SuperSoldier extends ArmyUnit {
     }
 
     @Override
-    public Bullet loadBullet(float x, float y, GameWorld gw) {
-        return new SuperFireBullet(x,y,gw);
+    public Bullet loadBullet(float x, float y) {
+
+        return new SuperFireBullet(x,y);
     }
 }

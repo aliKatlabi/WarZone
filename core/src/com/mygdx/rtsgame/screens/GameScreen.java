@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mygdx.rtsgame.assets.GameAssetManager;
 import com.mygdx.rtsgame.elemnts.buildings.*;
 import com.mygdx.rtsgame.elemnts.units.ArmyUnit;
 import com.mygdx.rtsgame.elemnts.units.Tank;
@@ -18,16 +19,14 @@ import com.mygdx.rtsgame.menus.*;
 import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.Player;
 import com.mygdx.rtsgame.RTSGame;
-
 import java.util.ArrayList;
-
 import static java.lang.Math.abs;
 
 
 public class GameScreen extends Stage implements Screen , InputProcessor {
 
-    final RTSGame game;
-    private GameWorld gameWorld;
+    private final RTSGame game;
+
     private ControlMenu controlMenu;
     private EscapeMenu escMenu;
     private ShapeRenderer shr;
@@ -38,23 +37,27 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
     private Vector3  upPositionV , downPositionV , mouseMouvePositionV ,dragPositionV;
     private ArrayList<ArmyUnit> selectedUnits;
     private Box2DDebugRenderer debugRenderer;
-    private Sound gameSong = Gdx.audio.newSound(Gdx.files.internal("data/sounds/backSong.mp3"));
-    private Skin skin = new Skin(Gdx.files.internal("skins/skin-composer/skin/skin-composer-ui.json"));
     private float volume = 0.2f;
     public static boolean TAB=false;
     public static boolean ESC=false;
-    public ControlStage controlStage;
+    private ControlStage controlStage;
     Rectangle rect;
     ///for testing
     private  float resizewV=0,resizehV=0;
     private EndGameDialog endGameDialog;
 
-    public GameScreen(final RTSGame game, Maps map) {
+
+    private GameWorld gameWorld=GameWorld.getInstance();
+    private Sound gameSong = GameAssetManager.getInstance().manager.get(GameAssetManager.gameSound);
+    private Skin skin = GameAssetManager.getInstance().manager.get(GameAssetManager.composerSkin);
+
+    public GameScreen(final RTSGame game) {
 
 
         selectedUnits = new ArrayList<ArmyUnit>();
         this.game = game;
-        gameWorld = new GameWorld(map);
+
+        //gameWorld.loadMap(map);
 
         controlStage = new ControlStage(gameWorld);
         controlMenu = new ControlMenu(gameWorld,this);
@@ -73,12 +76,9 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
         gameSong.loop(volume);
         ////////////////
         InputMultiplexer multiplexer = new InputMultiplexer();
-
         multiplexer.addProcessor(controlStage);
         multiplexer.addProcessor(this);
-
         Gdx.input.setInputProcessor(multiplexer);
-
 
 
         ///
@@ -110,7 +110,6 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
 
 
         gameWorld.world.step(1/60f, 6, 2);
-
         gameWorld.act(delta);
         gameWorld.draw();
         gameWorld.worldRender(); // gameWorld.worldRender() show go after gameWorld.draw()
@@ -163,7 +162,6 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
     @Override
     public void pause() {
 
-
     }
 
     @Override
@@ -178,13 +176,16 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
 
     @Override
 	public void dispose () {
+
+        System.out.println("dis1");
+
+        selectedUnits.clear();
+        gameWorld.dispose();
         shr.dispose();
         gameSong.dispose();
+        skin.dispose();
 
-        for(ArmyUnit u:gameWorld.getArmyUnits()){
-            u.dispose();
-        }
-        gameWorld.disposeAll();
+
     }
 
     @Override
@@ -266,7 +267,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
             if(gameWorld.buildingInConstruction== Buildings.WARFACTORY){
                 if(gameWorld.getResorces()> Buildings.WARFACTORY.price()) {
                     gameWorld.setResorces(gameWorld.getResorces() - Buildings.WARFACTORY.price());
-                    Building newWarFactory = new WarFactory(downPositionV.x - MARGIN, downPositionV.y - MARGIN, gameWorld, gameWorld.currentPlayer);
+                    Building newWarFactory = new WarFactory(downPositionV.x - MARGIN, downPositionV.y - MARGIN, gameWorld.currentPlayer);
                     gameWorld.build(newWarFactory);
                     gameWorld.setBuildingInConstruction(Buildings.NOB);
                 }
@@ -274,7 +275,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
             if(gameWorld.buildingInConstruction== Buildings.BARRAKS){
                 if(gameWorld.getResorces()> Buildings.BARRAKS.price()) {
                     gameWorld.setResorces(gameWorld.getResorces() - Buildings.BARRAKS.price());
-                    Building barrck = new Barrack(downPositionV.x - MARGIN, downPositionV.y - MARGIN, gameWorld, gameWorld.currentPlayer);
+                    Building barrck = new Barrack(downPositionV.x - MARGIN, downPositionV.y - MARGIN, gameWorld.currentPlayer);
                     gameWorld.build(barrck);
                     gameWorld.setBuildingInConstruction(Buildings.NOB);
                 }
@@ -283,7 +284,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
             if(gameWorld.buildingInConstruction== Buildings.RESOURSEFACTORY){
                 if(gameWorld.getResorces()> Buildings.RESOURSEFACTORY.price()) {
                     gameWorld.setResorces(gameWorld.getResorces() - Buildings.RESOURSEFACTORY.price());
-                    Building newResourceFactory = new ResourceFactory(downPositionV.x - MARGIN, downPositionV.y - MARGIN, gameWorld, gameWorld.currentPlayer);
+                    Building newResourceFactory = new ResourceFactory(downPositionV.x - MARGIN, downPositionV.y - MARGIN, gameWorld.currentPlayer);
                     gameWorld.build(newResourceFactory);
                     gameWorld.setBuildingInConstruction(Buildings.NOB);
                 }
@@ -291,7 +292,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
             if(gameWorld.buildingInConstruction== Buildings.WALL){
                 if(gameWorld.getResorces()> Buildings.WALL.price()) {
                     gameWorld.setResorces(gameWorld.getResorces() - Buildings.WALL.price());
-                    Building newWall = new Wall(downPositionV.x - MARGIN, downPositionV.y - MARGIN, gameWorld,gameWorld.currentPlayer);
+                    Building newWall = new Wall(downPositionV.x - MARGIN, downPositionV.y - MARGIN,gameWorld.currentPlayer);
                     gameWorld.build(newWall);
                     gameWorld.setBuildingInConstruction(Buildings.NOB);
                 }
@@ -409,7 +410,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
         return false;
     }
 
-    boolean insideSelectionRectangle(Actor u){
+    private boolean insideSelectionRectangle(Actor u){
         float x = u.getX();
         float y = u.getY();
 
@@ -455,23 +456,23 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
 
         if(gameWorld.currentMap ==Maps.MAP1) {
 
-            gameWorld.spawn(new Tank(500, 500, gameWorld, Player.PLAYER1));
-            gameWorld.spawn(new Tank(400, 500, gameWorld, Player.PLAYER1));
-            gameWorld.spawn(new Tank(500, 200, gameWorld, Player.PLAYER2));
+            gameWorld.spawn(new Tank(500, 500,  Player.PLAYER1));
+            gameWorld.spawn(new Tank(400, 500,  Player.PLAYER1));
+            gameWorld.spawn(new Tank(500, 200,  Player.PLAYER2));
 
-            gameWorld.spawn(new Tank(400, 300, gameWorld, Player.PLAYER2));
-            gameWorld.build(new WarFactory(700, 700, gameWorld, Player.PLAYER2));
+            gameWorld.spawn(new Tank(400, 300, Player.PLAYER2));
+            gameWorld.build(new WarFactory(700, 700, Player.PLAYER2));
         }
         if(gameWorld.currentMap ==Maps.MAP2 || gameWorld.currentMap ==Maps.MAP3){
 
-            gameWorld.spawn(new Tank(955 , 1320, gameWorld, Player.PLAYER2));
+            gameWorld.spawn(new Tank(955 , 1320, Player.PLAYER2));
 
-            gameWorld.spawn(new Tank(1068, 1184, gameWorld, Player.PLAYER2));
-            gameWorld.spawn(new Tank(1290, 1106, gameWorld, Player.PLAYER2));
+            gameWorld.spawn(new Tank(1068, 1184, Player.PLAYER2));
+            gameWorld.spawn(new Tank(1290, 1106, Player.PLAYER2));
 
-            gameWorld.build(new WarFactory(1402,1205,gameWorld,Player.PLAYER2));
-            gameWorld.build(new Barrack(897,1422,gameWorld,Player.PLAYER2));
-            gameWorld.build(new ResourceFactory(1206,1299,gameWorld,Player.PLAYER2));
+            gameWorld.build(new WarFactory(1402,1205,Player.PLAYER2));
+            gameWorld.build(new Barrack(897,1422,Player.PLAYER2));
+            gameWorld.build(new ResourceFactory(1206,1299,Player.PLAYER2));
 
 
         }

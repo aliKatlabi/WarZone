@@ -1,25 +1,20 @@
 package com.mygdx.rtsgame.menus;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.rtsgame.RTSGame;
-import com.mygdx.rtsgame.screens.GameScreen;
+import com.mygdx.rtsgame.assets.GameAssetManager;
+import com.mygdx.rtsgame.screens.EndScreen;
+import com.mygdx.rtsgame.screens.LoadingScreen;
 
 public class MainMenu extends Table {
 
-    RTSGame game;
-    Maps currentMap = Maps.NOM;
-    private Skin skin = new Skin(Gdx.files.internal("skins/tracer/skin/tracer-ui.json"));
-    private float BUTTONHIEGHT=40f;
-    private float BUTTONWIDTH=200f;
-    private TextButton b1;
-    private TextButton b2;
-    private TextButton mapb1;
-    private TextButton mapb2;
-    private TextButton mapb3;
-    ProgressBar progressBar;
+    private RTSGame game;
+    private Maps currentMap = Maps.NOM;
+    private Skin skin = GameAssetManager.getInstance().manager.get(GameAssetManager.tracerSkin);
+    private static final float BUTTON_HEIGHT=40f;
+    private static final float BUTTON_WIDTH=200f;
 
     public MainMenu(final RTSGame game ){
         this.game = game;
@@ -27,48 +22,42 @@ public class MainMenu extends Table {
         Label head = new Label("WarZone",skin,"default");
         head.setFontScale(2.9f);
 
-
-        progressBar = new ProgressBar(0,100,30,false,skin);
-
-
         this.setFillParent(true);
-
         this.center();
         this.add(head);
         this.row();
 
-        this.add(chooseMap1()).padTop(40f).width(BUTTONWIDTH).height(BUTTONHIEGHT);
+        this.add(chooseMap1()).padTop(40f).width(BUTTON_WIDTH).height(BUTTON_HEIGHT);
         this.row();
-        this.add(chooseMap2()).padTop(10f).width(BUTTONWIDTH).height(BUTTONHIEGHT);
+        this.add(chooseMap2()).padTop(10f).width(BUTTON_WIDTH).height(BUTTON_HEIGHT);
         this.row();
-        this.add(chooseMap3()).padTop(10f).width(BUTTONWIDTH).height(BUTTONHIEGHT);
+        this.add(chooseMap3()).padTop(10f).width(BUTTON_WIDTH).height(BUTTON_HEIGHT);
         this.row();
-        this.add(startButton()).padTop(100f).width(BUTTONWIDTH).height(BUTTONHIEGHT);
+        this.add(startButton()).padTop(100f).width(BUTTON_WIDTH).height(BUTTON_HEIGHT);
         this.row();
-        this.add(exitButton()).padTop(10f).width(BUTTONWIDTH).height(BUTTONHIEGHT);
+        this.add(exitButton()).padTop(10f).width(BUTTON_WIDTH).height(BUTTON_HEIGHT);
 
 
     }
 
 
-    public TextButton startButton(){
+    private TextButton startButton(){
+
+        TextButton b1;
         b1 = new TextButton("Scrimmage",skin);
 
         b1.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if(!(currentMap == Maps.NOM)){
-                    row();
-                    add(progressBar).padTop(10f).width(BUTTONWIDTH).height(10f);
-                    progressBar.act(Gdx.graphics.getDeltaTime());
-                    game.setScreen(new GameScreen(game,currentMap));
+                    game.setScreen(new LoadingScreen(game,currentMap));
                 }
             }
         });
         return b1;
     }
-    public TextButton chooseMap1(){
-
+    private TextButton chooseMap1(){
+        TextButton mapb1;
         mapb1 = new TextButton("Borders",skin );
 
         mapb1.addListener(new ClickListener(){
@@ -79,8 +68,8 @@ public class MainMenu extends Table {
         });
         return mapb1;
     }
-    public TextButton chooseMap2(){
-
+    private TextButton chooseMap2(){
+        TextButton mapb2;
         mapb2 = new TextButton("Behind enemies line",skin );
         mapb2.addListener(new ClickListener(){
             @Override
@@ -91,8 +80,8 @@ public class MainMenu extends Table {
         return mapb2;
     }
 
-    public TextButton chooseMap3(){
-
+    private TextButton chooseMap3(){
+        TextButton mapb3;
         mapb3 = new TextButton("Far Land",skin );
         mapb3.addListener(new ClickListener(){
             @Override
@@ -104,14 +93,16 @@ public class MainMenu extends Table {
     }
 
 
-    public TextButton exitButton(){
+    private TextButton exitButton(){
+
 
         TextButton b = new TextButton("Exit",skin);
         b.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                Gdx.app.exit();
 
+                game.getScreen().dispose();
+                game.setScreen(new EndScreen(game));
             }
         });
         return b;

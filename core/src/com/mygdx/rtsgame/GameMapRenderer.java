@@ -1,6 +1,6 @@
 package com.mygdx.rtsgame;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
+
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -16,26 +16,24 @@ import com.mygdx.rtsgame.elemnts.units.ArmyUnit;
 import java.util.ArrayList;
 
 public class GameMapRenderer extends OrthogonalTiledMapRenderer {
-    World world;
-    OrthographicCamera camera;
-    ArrayList<ArmyUnit> warElements;
-    int drawSpritesAfterLayer=1;
-    static  int i = 0;
-    public GameMapRenderer(TiledMap map , World w  ) {
+
+    private World world;
+    private ArrayList<ArmyUnit> warElements;
+    private final int drawSpritesAfterLayer=1;
+    private static  int i = 0;
+
+    GameMapRenderer(TiledMap map , World w  ) {
         super(map);
         world = w;
         warElements = new ArrayList<ArmyUnit>();
         installStaticBodies();
     }
-    public void addUnitToMapRenderer(ArmyUnit p){
+    void addUnitToMapRenderer(ArmyUnit p){
 
         warElements.add(p);
     }
     void removeUnitFromMapRenderer(ArmyUnit p){
-
-        warElements.remove(p);
-    }
-
+        warElements.remove(p); }
 
     @Override
     public void render() {
@@ -48,7 +46,7 @@ public class GameMapRenderer extends OrthogonalTiledMapRenderer {
                 if (layer instanceof TiledMapTileLayer) {
                     renderTileLayer((TiledMapTileLayer) layer);
                     currentLayer++;
-                    if (currentLayer == 1) {
+                    if (currentLayer == drawSpritesAfterLayer) {
                         for (ArmyUnit p : warElements) {
                                 p.draw(this.getBatch(), 0);
                         }
@@ -93,7 +91,6 @@ public class GameMapRenderer extends OrthogonalTiledMapRenderer {
                 }
 
                 i++;
-                System.out.println(i);
             }
 
         }

@@ -1,19 +1,10 @@
 package com.mygdx.rtsgame.menus;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.TextureData;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.assets.GameAssetManager;
 import com.mygdx.rtsgame.elemnts.buildings.Barrack;
@@ -32,73 +23,41 @@ public class ControlMenu extends Table   {
     private GameWorld gameWorld;
     private GameScreen gameScreen;
     private Skin skin ;
-    private float BUTTONHIEGHT=25f;
-    private float BUTTONWIDTH=85f;
-    private long SEED = 100l;
+
     private float fontScale = 0.7f;
     private Label resources;
-    private ShapeRenderer shr = new ShapeRenderer();
 
     public ControlMenu(final GameWorld gw , GameScreen gs){
         gameScreen = gs;
         gameWorld = gw ;
-        skin = gameWorld.assetManager.manager.get(GameAssetManager.tracerSkin);
+
+        final float BUTTON_HEIGHT=65f;
+        final float BUTTON_WIDTH=75f;
+
+        skin = GameAssetManager.getInstance().manager.get(GameAssetManager.tracerSkin);
         resources = new Label("|Resources|",skin);
         resources.setFontScale(fontScale);
-
         resources.setColor(Color.BLACK);
-        shr.setAutoShapeType(true);
         this.setFillParent(true);
-        this.top().right();
-        this.add(resources).padBottom(10).padLeft(10).padRight(15);
+
+        center();
+        this.add(superSoldierSpawn()).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5).padLeft(5);
+        this.add(tankSpawn()).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5).padLeft(5);
+        this.add(soldierSpawn()).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5).padLeft(5);
         row();
-        this.add(superSoldierSpawn()).padBottom(10).padLeft(10).width(BUTTONWIDTH).height(BUTTONHIEGHT);
-        row();
-        this.add(tankSpawn()).padBottom(10).padLeft(10).width(BUTTONWIDTH).height(BUTTONHIEGHT);
-        row();
-        this.add(warFctory()).padBottom(10).padLeft(10).width(BUTTONWIDTH).height(BUTTONHIEGHT);
-        row();
-        this.add(barrack()).padBottom(10).padLeft(10).width(BUTTONWIDTH).height(BUTTONHIEGHT);
-        row();
-        this.add(resourceFactory()).padBottom(10).padLeft(10).width(BUTTONWIDTH).height(BUTTONHIEGHT);
-        row();
-        this.add(sol()).padBottom(10).padLeft(10).width(2*BUTTONWIDTH).height(3*BUTTONHIEGHT);
+        this.add(warFactory()).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5).padLeft(5);
+        this.add(barrack()).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5).padLeft(5);
+        this.add(resourceFactory()).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5).padLeft(5);
 
 
     }
 
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
 
-        shr.end();
-        shr.begin();
-        shr.rect(getX(),getY(),getWidth(),getHeight(),Color.BLACK,Color.BLUE,Color.BLACK,Color.BLUE);
-    }
+    private TextButton soldierSpawn(){
 
-    ImageButton sol(){
-
-        Texture sol = GameWorld.assetManager.manager.get(GameAssetManager.soldierTexture);
-
-        TextureRegion disRegion = new TextureRegion(sol);
-        TextureRegionDrawable disImgRg = new TextureRegionDrawable(disRegion);
-
-        ImageButton gi = new ImageButton(disImgRg);
-        return gi;
-    }
-
-
-    TextButton soldierSpawn(){
-
-        TextButton b = new TextButton("soldier", skin);
-        final Label lb = new Label("Soldier",skin);
-        lb.setColor(0.2f,0.2f,0.5f,1);
-        lb.setFontScale(fontScale);
-        lb.setAlignment(Align.center);
-        b.setLabel(lb);
-        b.setColor(Color.BLACK);
-
+        CMTextButton b = new CMTextButton("soldier", skin);
+        b.setConfig1(fontScale);
 
         b.addListener(new ClickListener(){
             @Override
@@ -110,7 +69,7 @@ public class ControlMenu extends Table   {
                         if ((b instanceof Barrack) && b.getPlayerId() == gameWorld.currentPlayer) {
                             if (gameWorld.getResorces() > ArmyUnits.SOLDIER.price) {
                                 gameWorld.setResorces(gameWorld.getResorces() - ArmyUnits.SOLDIER.price);
-                                Soldier newSoldier = new Soldier(b.getX() + b.getWidth(), b.getY() + b.getHeight(), gameWorld, gameWorld.currentPlayer);
+                                Soldier newSoldier = new Soldier(b.getX() + b.getWidth(), b.getY() + b.getHeight(),gameWorld.currentPlayer);
                                 gameWorld.spawn(newSoldier);
                                 break;
                             }
@@ -123,16 +82,10 @@ public class ControlMenu extends Table   {
         return b;
     }
 
-    TextButton superSoldierSpawn(){
+    private TextButton superSoldierSpawn(){
 
-        TextButton b = new TextButton("SuperSoldier", skin);
-        final Label lb = new Label("Omega",skin);
-        lb.setColor(0.2f,0.2f,0.5f,1);
-        lb.setFontScale(fontScale);
-        lb.setAlignment(Align.center);
-        b.setLabel(lb);
-        b.setColor(Color.BLACK);
-
+        CMTextButton b = new CMTextButton("SuperSoldier", skin);
+        b.setConfig1(fontScale);
 
         b.addListener(new ClickListener(){
             @Override
@@ -144,7 +97,7 @@ public class ControlMenu extends Table   {
                         if ((b instanceof Barrack) && b.getPlayerId() == gameWorld.currentPlayer) {
                             if (gameWorld.getResorces() > ArmyUnits.SUPER_SOLDIER.price) {
                                 gameWorld.setResorces(gameWorld.getResorces() - ArmyUnits.SUPER_SOLDIER.price);
-                                SuperSoldier newSoldier = new SuperSoldier(b.getX() + b.getWidth(), b.getY() + b.getHeight(), gameWorld, gameWorld.currentPlayer);
+                                SuperSoldier newSoldier = new SuperSoldier(b.getX() + b.getWidth(), b.getY() + b.getHeight(), gameWorld.currentPlayer);
                                 gameWorld.spawn(newSoldier);
                                 break;
                             }
@@ -157,15 +110,10 @@ public class ControlMenu extends Table   {
         return b;
     }
 
-    TextButton tankSpawn(){
+    private TextButton tankSpawn(){
 
-        TextButton b = new TextButton("tank", skin);
-        Label lb = new Label("Tank",skin);
-        lb.setColor(0.2f,0.2f,0.5f,1);
-        lb.setFontScale(fontScale);
-        lb.setAlignment(Align.center);
-        b.setLabel(lb);
-        b.setColor(Color.BLACK);
+        CMTextButton b = new CMTextButton("tank", skin);
+        b.setConfig1(fontScale);
 
 
         b.addListener(new ClickListener(){
@@ -180,7 +128,7 @@ public class ControlMenu extends Table   {
                         if ((b instanceof WarFactory) && b.getPlayerId() == gameWorld.currentPlayer) {
                             if (gameWorld.getResorces() > ArmyUnits.TANK.price) {
                                 gameWorld.setResorces(gameWorld.getResorces() - ArmyUnits.TANK.price);
-                                Tank newTank = new Tank(b.getX() + b.getWidth(), b.getY() + b.getHeight(), gameWorld, gameWorld.currentPlayer);
+                                Tank newTank = new Tank(b.getX() + b.getWidth(), b.getY() + b.getHeight(), gameWorld.currentPlayer);
                                 gameWorld.spawn(newTank);
                                 break;
                             }
@@ -192,15 +140,10 @@ public class ControlMenu extends Table   {
 
         return b;
     }
-    TextButton warFctory(){
+    private TextButton warFactory(){
 
-        TextButton b = new TextButton("war factory", skin);
-        Label lb = new Label("War factory",skin);
-        lb.setColor(0.8f,0.2f,0.2f,1);
-        lb.setFontScale(fontScale);
-        lb.setAlignment(Align.center);
-        b.setLabel(lb);
-        b.setColor(Color.BLACK);
+        CMTextButton b = new CMTextButton("war factory", skin);
+        b.setConfig1(fontScale);
 
         b.addListener(new ClickListener(){
             @Override
@@ -212,15 +155,10 @@ public class ControlMenu extends Table   {
 
         return b;
     }
-    TextButton resourceFactory(){
+    private TextButton resourceFactory(){
 
-        TextButton b = new TextButton("Gold plant", skin);
-        Label lb = new Label("Gold plant",skin);
-        lb.setColor(0.8f,0.2f,0.2f,1);
-        lb.setFontScale(fontScale);
-        lb.setAlignment(Align.center);
-        b.setLabel(lb);
-        b.setColor(Color.BLACK);
+        CMTextButton b = new CMTextButton("Gold plant", skin);
+        b.setConfig1(fontScale);
 
         b.addListener(new ClickListener(){
             @Override
@@ -232,15 +170,10 @@ public class ControlMenu extends Table   {
 
         return b;
     }
-    TextButton barrack(){
+    private TextButton barrack(){
 
-        TextButton b = new TextButton("Barrack", skin);
-        Label lb = new Label("Barrack",skin);
-        lb.setColor(0.8f,0.2f,0.2f,1);
-        lb.setFontScale(fontScale);
-        lb.setAlignment(Align.center);
-        b.setLabel(lb);
-        b.setColor(Color.BLACK);
+        CMTextButton b = new CMTextButton("Barrack", skin);
+
 
         b.addListener(new ClickListener(){
             @Override
@@ -253,9 +186,10 @@ public class ControlMenu extends Table   {
 
         return b;
     }
+    /*
     TextButton wall(){
 
-        TextButton b = new TextButton("wall", skin);
+        CMTextButton b = new CMTextButton("wall", skin);
         b.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -266,31 +200,11 @@ public class ControlMenu extends Table   {
 
         return b;
     }
-
+*/
     public void updateState() {
 
         resources.setText("| Resources | " + gameWorld.getResorces());
-        /*
 
-
-        if(GameWorld.enemyUnitsCount <=0){
-            System.out.println("won" + GameWorld.currentPlayersUnitsCount);
-
-            gameFinisheDialoge.text("Congratulations! You Won");
-            if(Gdx.graphics.getDeltaTime()<5f)
-                gameFinisheDialoge.show(gameScreen);
-
-        }
-        if(gameWorld.hasUnits && GameWorld.currentPlayersUnitsCount <=0){
-            System.out.println("lost" + GameWorld.enemyUnitsCount);
-            gameFinisheDialoge.text("War is tragedy !" );
-            if(Gdx.graphics.getDeltaTime()<5f)
-                gameFinisheDialoge.show(gameScreen);
-        }
-
-    }
-
-         */
     }
 
 

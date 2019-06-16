@@ -5,7 +5,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.RTSGame;
+import com.mygdx.rtsgame.assets.GameAssetManager;
 import com.mygdx.rtsgame.menus.MainMenu;
 
 public class StartScreen extends Stage implements Screen {
@@ -66,6 +68,9 @@ public class StartScreen extends Stage implements Screen {
     @Override
     public void dispose() {
 
+        System.out.println("dis");
+
+        GameAssetManager.getInstance().dispose();
         game.dispose();
     }
 }
