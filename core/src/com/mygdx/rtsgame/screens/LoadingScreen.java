@@ -13,8 +13,7 @@ import com.mygdx.rtsgame.menus.Maps;
 
 
 public class LoadingScreen  extends Stage implements Screen {
-
-
+    
     private RTSGame game;
     private OrthographicCamera camera;
     private ShapeRenderer progressBar;
