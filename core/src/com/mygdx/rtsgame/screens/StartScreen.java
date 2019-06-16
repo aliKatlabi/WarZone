@@ -13,12 +13,12 @@ import com.mygdx.rtsgame.menus.MainMenu;
 public class StartScreen extends Stage implements Screen {
 
     private RTSGame game;
-    private MainMenu mainMenu;
     private OrthographicCamera camera;
-    public StartScreen(final RTSGame game){
 
+    public StartScreen(final RTSGame game){
+        
         this.game = game;
-        mainMenu = new MainMenu(game);
+        MainMenu mainMenu = new MainMenu(game);
         this.addActor(mainMenu);
 
         camera = new OrthographicCamera();

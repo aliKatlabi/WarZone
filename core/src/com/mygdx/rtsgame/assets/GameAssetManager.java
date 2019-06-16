@@ -4,7 +4,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.sun.org.apache.xpath.internal.operations.Variable;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

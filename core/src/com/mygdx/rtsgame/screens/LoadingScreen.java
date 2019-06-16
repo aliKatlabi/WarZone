@@ -19,13 +19,11 @@ public class LoadingScreen  extends Stage implements Screen {
     private ShapeRenderer progressBar;
     private GameAssetManager gameAssetManager =GameAssetManager.getInstance();
     private float progress;
+
     public LoadingScreen(final RTSGame game, Maps map){
-
-
         this.game=game;
         progressBar = new ShapeRenderer();
         progressBar.setAutoShapeType(true);
-
         GameWorld gameWorld = GameWorld.getInstance();
         gameWorld.loadMap(map);
         gameAssetManager.load();
@@ -85,6 +83,6 @@ public class LoadingScreen  extends Stage implements Screen {
 
     @Override
     public void dispose() {
-
+        progressBar.dispose();
     }
 }

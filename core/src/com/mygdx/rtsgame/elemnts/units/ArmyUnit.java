@@ -21,10 +21,14 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
 
     Texture unitTexture;
+    Sound shootingSound;
+    Sound destroyedSound;
+    Sound movingSound;
+
     public Player playerId ;
     private Body unitBody;
     private BodyDef bodyDef;
-    private GameWorld gameWorld =GameWorld.getInstance();
+    private GameWorld gameWorld = GameWorld.getInstance();
     private Bullet bullet ;
     private ShapeRenderer shapeRenderer;
 
@@ -34,27 +38,22 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
     private boolean moving = false;
     private boolean shoot = false;
 
-
     private float elapsedTime=0;
     private float spawnTime ;
     private float destructionPhase=0f;
 
+    private float x,y;
     private float range ;
     private float hp;
     private float fireRate=0.5f;
     private float moveSpeed;
-     Sound shootingSound;
-     Sound destroyedSound;
-     Sound movingSound;
     private float volume=0.4f;
-    private ArmyUnit enemy;
     protected float scale=1;
     private float mouseX , mouseY;
-    private static final float  shootingRange =80f;
-    private static final float DESTRUCTION_TIME=0.7f;
-    private static final float DEVIATION = 15f;
     private float bodyRadius ;
 
+
+    private ArmyUnit enemy;
     public MoveToAction prevMove;
     private HealthBar healthBar;
     private VisualShape visual;
@@ -63,6 +62,9 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
         //ArmyUnit to Unit or ArmyUnit
         setX(px);
         setY(py);
+
+        x=getX();
+        y=getY();
 
         playerId  = playrid;
         shapeRenderer = new ShapeRenderer();
@@ -90,6 +92,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
         moving = true;
 
         if (moving){
+
 
             setBounds(this.getX(), this.getY(), unitTexture.getWidth() * scale, unitTexture.getHeight() * scale);
             MoveToAction move = new MoveToAction();
@@ -126,8 +129,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     }
 
-    private void staticMove(float X, float Y)
-    {
+    private void staticMove(float X, float Y) {
 
         MoveToAction staticMove = new MoveToAction();
         staticMove.setPosition(X, Y);
@@ -136,19 +138,17 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     }
 
-    public void attack(ArmyUnit e)
-    {
+    public void attack(ArmyUnit e) {
 
         enemy = e;
 
-        moveTo(e.getX() - shootingRange *translate(this,enemy).X ,
-                e.getY()- shootingRange *translate(this,enemy).Y , true);
+        moveTo(e.getX() - SHOOTING_RANGE *translate(this,enemy).X ,
+                e.getY()- SHOOTING_RANGE *translate(this,enemy).Y , true);
 
         setShoot(true);
     }
 
-    private void shoot()
-    {
+    private void shoot() {
 
         if (shoot&&inRange()) {
 
@@ -169,8 +169,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
         }
     }
 
-    private boolean inRange()
-    {
+    private boolean inRange() {
 
         if(enemy!=null){
             Vector2 me   = new Vector2(this.getX(),this.getY());
@@ -185,8 +184,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
         }
     }
 
-    public void getDamage(float damage)
-    {
+    public void getDamage(float damage) {
         healthBar.update(damage,hp);
         hp-=damage;
         if(hp<=0)
@@ -194,13 +192,11 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     }
 
-    public void destroy()
-    {
+    public void destroy() {
         gameWorld.world.destroyBody(unitBody);
         this.addAction(Actions.removeActor());
 
     }
-
 
     @Override
     public Bullet loadBullet(float x, float y) {
@@ -214,6 +210,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
                 ,abs(clickPos.y - (DEVIATION + getY()+getHeight()/2)))<getBodyRadius();
 
     }
+
     @Override
     public void draw(Batch batch, float alpha) {
 
@@ -223,13 +220,16 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
               shapeRenderer.setProjectionMatrix(gameWorld.getCamera().combined);
 
               shapeRenderer.end();
-              batch.end();
-
-              batch.begin();
               shapeRenderer.begin();
+
+              batch.end();
+              batch.begin();
+
 
               //visual.visual5(getX()-5,getY()-5,getWidth()+10,0, VisualShape.VisualType.PENTAGON);
               if (selected) {
+
+                  System.out.println("x "+x+" y "+y);
 
                   visual.draw(this.getX() + unitTexture.getWidth() / 2f, this.getY() + unitTexture.getHeight() / 2f,25);
               }
@@ -252,8 +252,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
       }
 
     @Override
-    public void act(float delta)
-    {
+    public void act(float delta) {
         super.act(delta);
 
         elapsedTime += delta;
@@ -300,10 +299,9 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
             }
 
 
+            x=getX();
+            y=getY();
 
-        /*
-        for(Iterator<Action> iter = this.getActions().iterator(); iter.hasNext();){
-            iter.next().act(delta); }*/
     }
 
     @Override
@@ -346,7 +344,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     public void dispose(){
 
-        shapeRenderer.dispose();
+       // shapeRenderer.dispose();
 
 
     }
@@ -490,7 +488,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
         return spawned;
     }
 
-    private void setSpawned(boolean spawned) {
+    protected void setSpawned(boolean spawned) {
         this.spawned = spawned;
     }
 

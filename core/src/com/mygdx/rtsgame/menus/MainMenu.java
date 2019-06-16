@@ -1,5 +1,6 @@
 package com.mygdx.rtsgame.menus;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -12,12 +13,13 @@ public class MainMenu extends Table {
 
     private RTSGame game;
     private Maps currentMap = Maps.NOM;
-    private Skin skin = GameAssetManager.getInstance().manager.get(GameAssetManager.tracerSkin);
+    private Skin skin;
     private static final float BUTTON_HEIGHT=40f;
     private static final float BUTTON_WIDTH=200f;
 
-    public MainMenu(final RTSGame game ){
+    public MainMenu(final RTSGame game){
         this.game = game;
+        skin = new Skin( Gdx.files.internal("skins/tracer/skin/tracer-ui.json"));
         //setDebug(true);
         Label head = new Label("WarZone",skin,"default");
         head.setFontScale(2.9f);

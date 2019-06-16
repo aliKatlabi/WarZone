@@ -2,12 +2,13 @@ package com.mygdx.rtsgame.menus;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.screens.GameScreen;
 import com.mygdx.rtsgame.screens.StartScreen;
 
 public class EndGameDialog extends Dialog {
 
-    GameScreen gameScreen;
+    private GameScreen gameScreen;
 
     public EndGameDialog(String title, Skin skin, GameScreen G) {
         super(title, skin);
@@ -31,7 +32,7 @@ public class EndGameDialog extends Dialog {
 
         if(gameScreen.getGameWorld().hasUnits) {
 
-            if (gameScreen.getGameWorld().enemyUnitsCount <= 0) {
+            if (GameWorld.getInstance().enemyUnitsCount <= 0) {
                 System.out.println("won" + gameScreen.getGameWorld().enemyUnitsCount);
                 this.text("Congratulations! You Won");
                 this.show(gameScreen.getGameWorld());

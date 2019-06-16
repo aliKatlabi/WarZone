@@ -46,13 +46,16 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
     private  float resizewV=0,resizehV=0;
     private EndGameDialog endGameDialog;
 
+    private MultiSelect<ArmyUnit> multiSelect;
 
-    private GameWorld gameWorld=GameWorld.getInstance();
-    private Sound gameSong = GameAssetManager.getInstance().manager.get(GameAssetManager.gameSound);
-    private Skin skin = GameAssetManager.getInstance().manager.get(GameAssetManager.composerSkin);
+    private GameWorld gameWorld       = GameWorld.getInstance();
+    private Sound     gameSong        = GameAssetManager.getInstance().manager.get(GameAssetManager.gameSound);
+    private Skin      skin            = GameAssetManager.getInstance().manager.get(GameAssetManager.composerSkin);
 
-    public GameScreen(final RTSGame game) {
+    GameScreen(final RTSGame game) {
 
+
+        multiSelect = new SelectionComponent<ArmyUnit>();
 
         selectedUnits = new ArrayList<ArmyUnit>();
         this.game = game;
@@ -68,9 +71,6 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
         controlStage.addActor(escMenu);
         //controlStage.addActor(endGameDialog);
 
-        Gdx.input.setInputProcessor(gameWorld);
-        ///
-
         shr = new ShapeRenderer();
         shr.setColor(Color.GREEN);
         gameSong.loop(volume);
@@ -79,7 +79,6 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
         multiplexer.addProcessor(controlStage);
         multiplexer.addProcessor(this);
         Gdx.input.setInputProcessor(multiplexer);
-
 
         ///
         rect = new Rectangle();
@@ -121,8 +120,9 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
          /////rendering selection rectangle
         shr.begin(ShapeRenderer.ShapeType.Line);
         shr.rect(mouseMoveX, Gdx.graphics.getHeight() - mouseMoveY, resizew, resizeh);
-           // shr.rect(mouseMouvePositionV.x,Gdx.graphics.getHeight()-mouseMouvePositionV.y,resizewV,resizehV);
+//        shr.rect(mouseMouvePositionV.x,Gdx.graphics.getHeight()-mouseMouvePositionV.y,resizewV,resizehV);
         shr.end();
+
 
         rect.set(mouseMoveX, Gdx.graphics.getHeight() - mouseMoveY, resizew, resizeh);
 
@@ -300,6 +300,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
         }
         return false;
     }
+
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
@@ -322,7 +323,6 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
                 if (u.getPlayerId()== gameWorld.currentPlayer ) { //select units with the player id of this game world
                     //insideUnitBoundries(u, upPositionV , u.scale )
                     if (u.hit(upPositionV)) {
-                        System.out.println("single selected");
                         if(u.playerId == gameWorld.currentPlayer) {
                             if(clearSelection()) {
                                 selectedUnits.add(u);
@@ -333,7 +333,6 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
                     ////////////////////////..... MULTI SELECT .... selection rectangle /////////////////////////
                     if (abs(resizew) > 37f && abs(resizeh) > 37f) { ////if the selection rectangle is big enough
                         if (insideSelectionRectangle(u)) {///////check if there are units inside the rect
-                            System.out.println("MULTI SELECT");
                             u.setSelected(true);
                             selectedUnits.add(u);
                         }
@@ -343,9 +342,10 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
                 //for selecting buildings
             }
         }
+
         resizew=0;resizeh=0;//resetting the rectangle
 
-        resizewV=0;resizehV=0;
+        multiSelect.reset();
         return true;
 
     }
@@ -360,8 +360,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
         resizew = screenX    - mouseMoveX;
         resizeh = mouseMoveY    - screenY;
         ///////////////////////////////////
-        //Vector3 vec = new Vector3(mouseMoveX,mouseMoveY,0);
-        dragPositionV = gameWorld.getCamera().unproject(new Vector3(mouseMoveX,mouseMoveY,0));
+        dragPositionV = gameWorld.getCamera().unproject(new Vector3(screenX,screenY,0));
 
         resizewV= dragPositionV.x - mouseMouvePositionV.x;
         resizehV=mouseMouvePositionV.y - dragPositionV.y;
@@ -411,12 +410,16 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
     }
 
     private boolean insideSelectionRectangle(Actor u){
+
         float x = u.getX();
         float y = u.getY();
+
+        getCamera().project(new Vector3(x,y,0));
 
         if(rect.contains(x,y)){
             System.out.println("inside new triangle");
         }
+
 
         ///upPosition.y downPosition.y
         boolean left     = downPositionV.x > upPositionV.x;
@@ -439,6 +442,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
 
 
     public boolean clearSelection(){
+
         if(!selectedUnits.isEmpty()) {
 
             for (Actor u : selectedUnits) {
