@@ -20,17 +20,15 @@ import com.mygdx.rtsgame.screens.GameScreen;
 
 public class ControlMenu extends Table   {
 
-    private GameWorld gameWorld;
-    private GameScreen gameScreen;
-    private Skin skin ;
 
-    private float fontScale = 0.7f;
+    private GameScreen gameScreen;
+    private final Skin skin ;
+    private final float fontScale = 0.7f;
     private Label resources;
 
-    public ControlMenu(final GameWorld gw , GameScreen gs){
-        gameScreen = gs;
-        gameWorld = gw ;
+    public ControlMenu(GameScreen gs){
 
+        gameScreen = gs;
         final float BUTTON_HEIGHT=65f;
         final float BUTTON_WIDTH=75f;
 
@@ -62,15 +60,15 @@ public class ControlMenu extends Table   {
         b.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                gameScreen.clearSelection();
-                for (Building b : gameWorld.getBuildings()) {
+                gameScreen.getMultiSelect().clearIn();
+                for (Building b : GameWorld.getInstance().getBuildings()) {
                     if(b.isConstructed()) {
 
-                        if ((b instanceof Barrack) && b.getPlayerId() == gameWorld.currentPlayer) {
-                            if (gameWorld.getResorces() > ArmyUnits.SOLDIER.price) {
-                                gameWorld.setResorces(gameWorld.getResorces() - ArmyUnits.SOLDIER.price);
-                                Soldier newSoldier = new Soldier(b.getX() + b.getWidth(), b.getY() + b.getHeight(),gameWorld.currentPlayer);
-                                gameWorld.spawn(newSoldier);
+                        if ((b instanceof Barrack) && b.getPlayerId() == GameWorld.getInstance().currentPlayer) {
+                            if (GameWorld.getInstance().getResources() > ArmyUnits.SOLDIER.price) {
+                                GameWorld.getInstance().setResources(GameWorld.getInstance().getResources() - ArmyUnits.SOLDIER.price);
+                                Soldier newSoldier = new Soldier(b.getX() + b.getWidth(), b.getY() + b.getHeight(),GameWorld.getInstance().currentPlayer);
+                                GameWorld.getInstance().spawn(newSoldier);
                                 break;
                             }
                         }
@@ -90,15 +88,15 @@ public class ControlMenu extends Table   {
         b.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                gameScreen.clearSelection();
-                for (Building b : gameWorld.getBuildings()) {
+                gameScreen.getMultiSelect().clearIn();
+                for (Building b : GameWorld.getInstance().getBuildings()) {
                     if(b.isConstructed()) {
 
-                        if ((b instanceof Barrack) && b.getPlayerId() == gameWorld.currentPlayer) {
-                            if (gameWorld.getResorces() > ArmyUnits.SUPER_SOLDIER.price) {
-                                gameWorld.setResorces(gameWorld.getResorces() - ArmyUnits.SUPER_SOLDIER.price);
-                                SuperSoldier newSoldier = new SuperSoldier(b.getX() + b.getWidth(), b.getY() + b.getHeight(), gameWorld.currentPlayer);
-                                gameWorld.spawn(newSoldier);
+                        if ((b instanceof Barrack) && b.getPlayerId() == GameWorld.getInstance().currentPlayer) {
+                            if (GameWorld.getInstance().getResources() > ArmyUnits.SUPER_SOLDIER.price) {
+                                GameWorld.getInstance().setResources(GameWorld.getInstance().getResources() - ArmyUnits.SUPER_SOLDIER.price);
+                                SuperSoldier newSoldier = new SuperSoldier(b.getX() + b.getWidth(), b.getY() + b.getHeight(), GameWorld.getInstance().currentPlayer);
+                                GameWorld.getInstance().spawn(newSoldier);
                                 break;
                             }
                         }
@@ -121,15 +119,15 @@ public class ControlMenu extends Table   {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                gameScreen.clearSelection();
-                for (Building b : gameWorld.getBuildings()) {
+                gameScreen.getMultiSelect().clearIn();
+                for (Building b : GameWorld.getInstance().getBuildings()) {
 
                     if (b.isConstructed()) {
-                        if ((b instanceof WarFactory) && b.getPlayerId() == gameWorld.currentPlayer) {
-                            if (gameWorld.getResorces() > ArmyUnits.TANK.price) {
-                                gameWorld.setResorces(gameWorld.getResorces() - ArmyUnits.TANK.price);
-                                Tank newTank = new Tank(b.getX() + b.getWidth(), b.getY() + b.getHeight(), gameWorld.currentPlayer);
-                                gameWorld.spawn(newTank);
+                        if ((b instanceof WarFactory) && b.getPlayerId() == GameWorld.getInstance().currentPlayer) {
+                            if (GameWorld.getInstance().getResources() > ArmyUnits.TANK.price) {
+                                GameWorld.getInstance().setResources(GameWorld.getInstance().getResources() - ArmyUnits.TANK.price);
+                                Tank newTank = new Tank(b.getX() + b.getWidth(), b.getY() + b.getHeight(), GameWorld.getInstance().currentPlayer);
+                                GameWorld.getInstance().spawn(newTank);
                                 break;
                             }
                         }
@@ -148,8 +146,8 @@ public class ControlMenu extends Table   {
         b.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                gameScreen.clearSelection();
-                gameWorld.setBuildingInConstruction(Buildings.WARFACTORY);
+                gameScreen.getMultiSelect().clearIn();
+                GameWorld.getInstance().setBuildingInConstruction(Buildings.WARFACTORY);
             }
         });
 
@@ -163,8 +161,8 @@ public class ControlMenu extends Table   {
         b.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gameScreen.clearSelection();
-                gameWorld.setBuildingInConstruction(Buildings.RESOURSEFACTORY);
+                gameScreen.getMultiSelect().clearIn();
+                GameWorld.getInstance().setBuildingInConstruction(Buildings.RESOURSEFACTORY);
             }
         });
 
@@ -178,8 +176,8 @@ public class ControlMenu extends Table   {
         b.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                gameScreen.clearSelection();
-                gameWorld.setBuildingInConstruction(Buildings.BARRAKS);
+                gameScreen.getMultiSelect().clearIn();
+                GameWorld.getInstance().setBuildingInConstruction(Buildings.BARRAKS);
 
             }
         });
@@ -203,7 +201,7 @@ public class ControlMenu extends Table   {
 */
     public void updateState() {
 
-        resources.setText("| Resources | " + gameWorld.getResorces());
+        resources.setText("| Resources | " + GameWorld.getInstance().getResources());
 
     }
 

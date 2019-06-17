@@ -10,13 +10,13 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.rtsgame.assets.GameAssetManager;
 import com.mygdx.rtsgame.elemnts.buildings.Building;
 import com.mygdx.rtsgame.elemnts.buildings.Buildings;
 import com.mygdx.rtsgame.elemnts.bullets.Bullet;
 import com.mygdx.rtsgame.elemnts.units.ArmyUnit;
 import com.mygdx.rtsgame.menus.Maps;
-
 import static java.lang.StrictMath.abs;
 
 
@@ -30,13 +30,12 @@ public class GameWorld extends Stage implements InputProcessor {
     private TiledMap gameMap;
     private GameMapRenderer mapRenderer;
     private OrthographicCamera camera ;
-    private int resorces=1000000;
+    private int resources=1000000;
     public boolean hasUnits = false;
 
 
     public   static      int currentPlayersUnitsCount=0;
     public   static      int enemyUnitsCount=0;
-    public   static      GameAssetManager assetManager = GameAssetManager.getInstance();
     private  static      GameWorld SINGLE_INS = null;
 
     private GameWorld (){ }
@@ -53,7 +52,7 @@ public class GameWorld extends Stage implements InputProcessor {
         return SINGLE_INS;
     }
 
-    public void loadMap(Maps map)
+    public void loadMap(Maps map) throws SerializationException
     {
 
         if(SINGLE_INS != null)
@@ -61,11 +60,13 @@ public class GameWorld extends Stage implements InputProcessor {
             world = new World(new Vector2(0,0),true);
             camera = new OrthographicCamera();
             camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            camera.update();
             currentMap = map;
             gameMap = new TmxMapLoader().load(map.path());
+            //gameMap = GameWorld.assetManager.manager.get(GameAssetManager.maps);
             mapRenderer = new GameMapRenderer(SINGLE_INS.gameMap, SINGLE_INS.world);
+            camera.update();
             world.setContactListener(SINGLE_INS.myContactListener());
+
 
         }
     }
@@ -100,17 +101,6 @@ public class GameWorld extends Stage implements InputProcessor {
         mapRenderer.render();
     }
 
-    public TiledMap getGameMap() {
-        return gameMap;
-    }
-
-    public void setGameMap(TiledMap gameMap) {
-        this.gameMap = gameMap;
-    }
-
-    public OrthographicCamera getCamera() {
-        return camera;
-    }
 
     public Array<ArmyUnit> getArmyUnits() {
 
@@ -182,17 +172,21 @@ public class GameWorld extends Stage implements InputProcessor {
 
         if(SINGLE_INS!=null)
         {
-
-            for (ArmyUnit u : getArmyUnits())
-                u.dispose();
-
             getArmyUnits().clear();
-            assetManager.manager.clear();
+            GameAssetManager.getInstance().manager.clear();
             mapRenderer.dispose();
             gameMap.dispose();
         }
 
     }
+
+    public void disposeArmyUnits(){
+
+        for (ArmyUnit u : getArmyUnits())
+            u.dispose();
+
+    }
+
     private ContactListener myContactListener() {
 
         return new ContactListener() {
@@ -302,44 +296,28 @@ public class GameWorld extends Stage implements InputProcessor {
     }
 
 
-
-
-
-
-
     ////////////////////
 
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
-    public Buildings getBuildingInConstruction() {
-        return buildingInConstruction;
-    }
-
     public void setBuildingInConstruction(Buildings buildingInConstruction) { this.buildingInConstruction = buildingInConstruction; }
 
-    public World getWorld() {
-        return world;
+    public int getResources() {
+        return resources;
     }
 
-    public void setWorld(World world) {
-        this.world = world;
+    public void setResources(int resources) {
+        this.resources = resources;
     }
 
-    public int getResorces() {
-        return resorces;
+    public OrthographicCamera getCamera() {
+        return camera;
     }
 
-    public void setResorces(int resorces) {
-        this.resorces = resorces;
-    }
-
+    /*
     public  int getCurrentPlayersUnitsCount() {
         return currentPlayersUnitsCount;
     }
@@ -361,6 +339,26 @@ public class GameWorld extends Stage implements InputProcessor {
     public void setMapRenderer(GameMapRenderer mapRenderer) {
         this.mapRenderer = mapRenderer;
     }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public World getWorld() { return world; }
+
+    public Buildings getBuildingInConstruction() {
+        return buildingInConstruction;
+    }
+
+    public TiledMap getGameMap() {
+        return gameMap;
+    }
+
+    public void setGameMap(TiledMap gameMap) {
+        this.gameMap = gameMap;
+    }
+
+*/
 
 
 }

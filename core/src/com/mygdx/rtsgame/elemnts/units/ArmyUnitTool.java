@@ -7,9 +7,9 @@ import com.mygdx.rtsgame.elemnts.bullets.Bullet;
 
 public interface ArmyUnitTool {
 
-     static final float  SHOOTING_RANGE     = 80f;
-     static final float  DESTRUCTION_TIME   = 0.7f;
-     static final float  DEVIATION          = 15f;
+     float  SHOOTING_RANGE     = 80f;
+     float  DESTRUCTION_TIME   = 0.7f;
+     float  DEVIATION          = 15f;
 
      Body creatBody(BodyDef.BodyType type );
      Bullet loadBullet(float x, float y);

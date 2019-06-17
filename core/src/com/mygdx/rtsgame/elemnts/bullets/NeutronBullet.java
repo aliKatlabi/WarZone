@@ -12,7 +12,7 @@ public final class NeutronBullet extends Bullet{
 
     public NeutronBullet(float px, float py) {
         super(px, py);
-        setBullet(GameWorld.assetManager.manager.get(GameAssetManager.NeutronBulletTexture));
+        setBullet(GameAssetManager.getInstance().manager.get(GameAssetManager.NeutronBulletTexture));
         setDamage(Bullets.NEUTRON_B.damage);
         setVelocity(Bullets.NEUTRON_B.velocity);
         setExistenceTime(Bullets.NEUTRON_B.existenceTime);
@@ -21,7 +21,7 @@ public final class NeutronBullet extends Bullet{
         setWidth(7f);
         setHeight(7f);
 
-        effect = GameWorld.assetManager.manager.get(GameAssetManager.bulletTexture);
+        effect = GameAssetManager.getInstance().manager.get(GameAssetManager.bulletTexture);
 
     }
 

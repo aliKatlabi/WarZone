@@ -14,8 +14,6 @@ import com.mygdx.rtsgame.Player;
 import com.mygdx.rtsgame.elemnts.units.ArmyUnit;
 import com.mygdx.rtsgame.elemnts.units.HealthBar;
 
-import java.util.Iterator;
-
 import static java.lang.Math.abs;
 
 public abstract class Building extends ArmyUnit {
@@ -24,10 +22,9 @@ public abstract class Building extends ArmyUnit {
     private Texture texture=new Texture(Gdx.files.internal("buildings/manufactory02.png"));
     private Sound destroyedSound = Gdx.audio.newSound(Gdx.files.internal("data/sounds/unitExpolded.mp3"));
 
-    private final static int price = 0;
     private float hp ;
     private Player playerId;
-    private float ellapsedTime=0;
+    private float elapsedTime=0;
     private float constructionTime;
     private boolean destroyed = false;
     private boolean constructed=false;
@@ -94,12 +91,12 @@ public abstract class Building extends ArmyUnit {
             batch.end();
             batch.begin();
 
-            if (ellapsedTime < constructionTime) {
+            if (elapsedTime < constructionTime) {
                 batch.draw(getInConstructTexture(), this.getX(), this.getY(), this.getOriginX(), this.getOriginY(), this.getWidth(),
                         this.getHeight(), this.getScaleX(), this.getScaleY(), this.getRotation(), 0, 0,
                         getInConstructTexture().getWidth(), getInConstructTexture().getHeight(), false, false);
             }
-            if (ellapsedTime >= constructionTime) {
+            if (elapsedTime >= constructionTime) {
                 constructed = true;
                 batch.draw(getTexture(), this.getX(), this.getY(), this.getOriginX(), this.getOriginY(), this.getWidth(),
                         this.getHeight(), this.getScaleX(), this.getScaleY(), this.getRotation(), 0, 0,
@@ -111,10 +108,10 @@ public abstract class Building extends ArmyUnit {
     @Override
     public void act(float delta) {
 
-        ellapsedTime+=delta;
+        elapsedTime+=delta;
 
-        for(Iterator<Action> iter = this.getActions().iterator(); iter.hasNext();){
-            iter.next().act(delta);
+        for (Action a:getActions()) {
+            a.act(delta);
         }
     }
 /*
@@ -142,9 +139,6 @@ public abstract class Building extends ArmyUnit {
         this.destroyed = destroyed;
     }
 
-    public int getPrice() {
-        return price;
-    }
 
     public float getHp() {
         return hp;
@@ -166,10 +160,6 @@ public abstract class Building extends ArmyUnit {
         return playerId;
     }
 
-    public void setPlayerId(Player playerId) {
-        this.playerId = playerId;
-    }
-
     private Texture getInConstructTexture() {
         return inConstructTexture;
     }
@@ -178,6 +168,33 @@ public abstract class Building extends ArmyUnit {
         this.inConstructTexture = inConstructTexture;
     }
 
+
+    void setConstructionTime(float constructionTime) {
+        this.constructionTime = constructionTime;
+    }
+
+    public GameWorld getGameWorld() {
+        return gameWorld;
+    }
+
+
+    private Body getBuildingBody() {
+        return BuildingBody;
+    }
+
+    private void setBuildingBody(Body buildingBody) {
+        BuildingBody = buildingBody;
+    }
+
+    public boolean isConstructed() {
+        return constructed;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
+
+    /*
     public Sound getDestroyedSound() {
         return destroyedSound;
     }
@@ -194,12 +211,19 @@ public abstract class Building extends ArmyUnit {
         this.scale = scale;
     }
 
-    @Override
+    public void setPlayerId(Player playerId) {
+        this.playerId = playerId;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
     public float getEllapsedTime() {
         return ellapsedTime;
     }
 
-    @Override
+
     public void setEllapsedTime(float ellapsedTime) {
         this.ellapsedTime = ellapsedTime;
     }
@@ -208,39 +232,8 @@ public abstract class Building extends ArmyUnit {
         return constructionTime;
     }
 
-    void setConstructionTime(float constructionTime) {
-        this.constructionTime = constructionTime;
-    }
-
-    @Override
-    public GameWorld getGameWorld() {
-        return gameWorld;
-    }
-
-    @Override
-    public void setGameWorld(GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
-    }
-
-    private Body getBuildingBody() {
-        return BuildingBody;
-    }
-
-    private void setBuildingBody(Body buildingBody) {
-        BuildingBody = buildingBody;
-    }
-
-
-    public boolean isConstructed() {
-        return constructed;
-    }
-
     public void setConstructed(boolean constructed) {
         this.constructed = constructed;
     }
-
-    @Override
-    public void setScale(float scale) {
-        this.scale = scale;
-    }
+*/
 }

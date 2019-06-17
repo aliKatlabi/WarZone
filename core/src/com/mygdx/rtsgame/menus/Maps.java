@@ -4,7 +4,7 @@ public enum Maps {
 
     NOM(""),MAP1("maps/Borders/firstmap.tmx"),MAP2("maps/Moon/moon.tmx"),MAP3("maps/Moon/moon.tmx");
 
-    private String path;
+    private final String path;
 
     public String path()
     {

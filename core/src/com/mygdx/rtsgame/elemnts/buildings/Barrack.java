@@ -13,7 +13,6 @@ public  final class Barrack extends Building {
         setConstructionTime(Buildings.BARRAKS.constructionTime);
         setHp(Buildings.BARRAKS.HP);
 
-
     }
     @Override
     public void draw(Batch batch, float parentAlpha){

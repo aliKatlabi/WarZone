@@ -9,7 +9,7 @@ import com.mygdx.rtsgame.RTSGame;
 public class EndScreen extends Stage implements Screen {
 
     private RTSGame game;
-    private float ellapseTime=0;
+    private float elapseTime=0;
 
 
     public EndScreen(final RTSGame game){
@@ -29,10 +29,10 @@ public class EndScreen extends Stage implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        ellapseTime+=delta;
+        elapseTime+=delta;
 
-        if(ellapseTime>3f){
-            ellapseTime=0;
+        if(elapseTime==3f){
+            elapseTime=0;
             dispose();
             Gdx.app.exit();
         }

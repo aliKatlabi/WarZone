@@ -10,7 +10,7 @@ import com.mygdx.rtsgame.assets.GameAssetManager;
 
 public class GImageButton extends ImageButton   {
 
-    private Skin skin = GameWorld.assetManager.manager.get(GameAssetManager.tracerSkin);
+    private Skin skin = GameAssetManager.getInstance().manager.get(GameAssetManager.tracerSkin);
 
     public GImageButton(Skin skin, Texture upImage, Texture downImage, Texture disableImage) {
         super(skin);

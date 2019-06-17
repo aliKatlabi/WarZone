@@ -8,11 +8,9 @@ import com.mygdx.rtsgame.screens.GameScreen;
 
 public class ControlStage extends Stage {
 
-    GameWorld gameWorld;
 
-    public ControlStage(GameWorld gameWorld){
+    public ControlStage(){
 
-        this.gameWorld=gameWorld;
     }
 
     @Override
@@ -32,13 +30,11 @@ public class ControlStage extends Stage {
 
         }
 
-
-
         if(keycode == Input.Keys.NUM_1 ){
-            gameWorld.setCurrentPlayer(Player.PLAYER1);
+            GameWorld.getInstance().setCurrentPlayer(Player.PLAYER1);
         }
         if(keycode == Input.Keys.NUM_2 ){
-            gameWorld.setCurrentPlayer(Player.PLAYER2);
+            GameWorld.getInstance().setCurrentPlayer(Player.PLAYER2);
         }
 
         return true;

@@ -19,13 +19,13 @@ public final class Tank extends ArmyUnit{
         setSpawnTime(ArmyUnits.TANK.spawnTime);
         scale =1.1f;
 
-        unitTexture = GameWorld.assetManager.manager.get(GameAssetManager.armyUnitTexture);
+        unitTexture = GameAssetManager.getInstance().manager.get(GameAssetManager.armyUnitTexture);
         setBounds(px,py,unitTexture.getWidth(),unitTexture.getHeight());
         //setLaunchPoint( max(4*unitTexture.getWidth()/5,4*unitTexture.getHeight()/5));
 
-        shootingSound   = GameWorld.assetManager.manager.get(GameAssetManager.tankShootingSound);
-        movingSound     = GameWorld.assetManager.manager.get(GameAssetManager.tankMovingSound);
-        destroyedSound  = GameWorld.assetManager.manager.get(GameAssetManager.tankDestroyedSound);
+        shootingSound   = GameAssetManager.getInstance().manager.get(GameAssetManager.tankShootingSound);
+        movingSound     = GameAssetManager.getInstance().manager.get(GameAssetManager.tankMovingSound);
+        destroyedSound  = GameAssetManager.getInstance().manager.get(GameAssetManager.tankDestroyedSound);
 
         setUnitBody(creatBody(BodyDef.BodyType.DynamicBody));
         installCircularBody(getUnitBody(),10,this.getWidth() /2 - 3,true);

@@ -5,10 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.rtsgame.GameWorld;
-import com.mygdx.rtsgame.elemnts.units.ArmyUnit;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-
 import static java.lang.StrictMath.abs;
 
 
@@ -18,7 +16,7 @@ public class SelectionComponent<E> implements MultiSelect<E> {
     //if E has position it should be projected onto the screen
 
     private Vector3 touchDown =new Vector3();
-    private Vector3  touchUp = new Vector3();
+    private Vector3 touchUp = new Vector3();
     private Vector3 pos = new Vector3();
     private Color color;
     private float resizeW,resizeH;
@@ -77,7 +75,6 @@ public class SelectionComponent<E> implements MultiSelect<E> {
 
         return b&&a||c&&a||a&&d||c&&d;
 
-
     }
 
     @Override
@@ -99,8 +96,21 @@ public class SelectionComponent<E> implements MultiSelect<E> {
         if(!inSelect.isEmpty()) {
 
             for (E e : inSelect) {
-                if (e instanceof ArmyUnit)
-                    ((ArmyUnit) e).setSelected(false);
+
+                    try {
+
+                        e.getClass().getMethod("setSelected",boolean.class).invoke(e,false);
+
+                    } catch (IllegalAccessException e1) {
+                        e1.printStackTrace();
+                    } catch (InvocationTargetException e1) {
+                        e1.printStackTrace();
+                    } catch (NoSuchMethodException e1) {
+                        System.out.println(e1.getMessage());
+                        inSelect.clear();
+                        return true;
+                    }
+               // if (e instanceof ArmyUnit) { ((ArmyUnit) e).setSelected(false);}
             }
 
             inSelect.clear();

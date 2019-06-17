@@ -6,12 +6,12 @@ public enum ArmyUnits {
     SOLDIER(560,460,20000f,0.4f,7f,4f),
     SUPER_SOLDIER(4560,4000,26000f,0.2f,7f,4f) ;
 
-    public int price;
-    public float HP;
-    public float range ;
-    public float fireRate;
-    public float moveSpeed;
-    public float spawnTime ;
+    public final int price;
+    public final float HP;
+    public final float range ;
+    public final float fireRate;
+    public final float moveSpeed;
+    public final float spawnTime ;
 
 
     ArmyUnits(int price ,float HP, float range ,float fireRate,float moveSpeed, float spawnTime ) {

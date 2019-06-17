@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.RTSGame;
-import com.mygdx.rtsgame.assets.GameAssetManager;
 import com.mygdx.rtsgame.screens.EndScreen;
 import com.mygdx.rtsgame.screens.LoadingScreen;
 
@@ -13,7 +13,7 @@ public class MainMenu extends Table {
 
     private RTSGame game;
     private Maps currentMap = Maps.NOM;
-    private Skin skin;
+    private final Skin skin;
     private static final float BUTTON_HEIGHT=40f;
     private static final float BUTTON_WIDTH=200f;
 
@@ -103,6 +103,7 @@ public class MainMenu extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y){
 
+                GameWorld.getInstance().disposeArmyUnits();
                 game.getScreen().dispose();
                 game.setScreen(new EndScreen(game));
             }

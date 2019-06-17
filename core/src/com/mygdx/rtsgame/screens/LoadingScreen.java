@@ -3,7 +3,6 @@ package com.mygdx.rtsgame.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.rtsgame.GameWorld;
@@ -14,25 +13,25 @@ import com.mygdx.rtsgame.menus.Maps;
 
 public class LoadingScreen  extends Stage implements Screen {
     
-    private RTSGame game;
-    private OrthographicCamera camera;
+    private final RTSGame game;
+    //private OrthographicCamera camera;
     private ShapeRenderer progressBar;
-    private GameAssetManager gameAssetManager =GameAssetManager.getInstance();
-    private float progress;
+    private GameAssetManager gameAssetManager = GameAssetManager.getInstance();
+
 
     public LoadingScreen(final RTSGame game, Maps map){
         this.game=game;
         progressBar = new ShapeRenderer();
         progressBar.setAutoShapeType(true);
         GameWorld gameWorld = GameWorld.getInstance();
+
         gameWorld.loadMap(map);
+
         gameAssetManager.load();
     }
 
     @Override
     public void show() {
-
-
 
     }
 
@@ -45,6 +44,7 @@ public class LoadingScreen  extends Stage implements Screen {
 
         progressBar.begin(ShapeRenderer.ShapeType.Filled);
 
+        float progress;
 
         if(!gameAssetManager.manager.update()){
 
@@ -54,7 +54,9 @@ public class LoadingScreen  extends Stage implements Screen {
         }else{
 
             progressBar.dispose();
-            game.setScreen(new GameScreen(game));
+            GameScreen gs = new GameScreen(game);
+            gs.setVolume(0.2f);
+            game.setScreen(gs);
         }
 
         progressBar.end();

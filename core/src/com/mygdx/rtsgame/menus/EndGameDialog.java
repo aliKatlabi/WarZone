@@ -33,11 +33,11 @@ public class EndGameDialog extends Dialog {
         if(gameScreen.getGameWorld().hasUnits) {
 
             if (GameWorld.getInstance().enemyUnitsCount <= 0) {
-                System.out.println("won" + gameScreen.getGameWorld().enemyUnitsCount);
+                System.out.println("won" + GameWorld.enemyUnitsCount);
                 this.text("Congratulations! You Won");
                 this.show(gameScreen.getGameWorld());
             }
-            if (gameScreen.getGameWorld().currentPlayersUnitsCount <= 0) {
+            if (GameWorld.currentPlayersUnitsCount <= 0) {
                 //System.out.println("lost" + GameWorld.enemyUnitsCount);
                 this.text("War is tragedy !");
                 this.show(gameScreen.getGameWorld());

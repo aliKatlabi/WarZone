@@ -9,7 +9,7 @@ public final class FireBullet extends Bullet {
 
     public FireBullet(float px, float py) {
         super(px, py);
-        setBullet(GameWorld.assetManager.manager.get(GameAssetManager.bulletTexture));
+        setBullet(GameAssetManager.getInstance().manager.get(GameAssetManager.bulletTexture));
         setDamage(Bullets.FIRE_B.damage);
         setVelocity(Bullets.FIRE_B.velocity);
     }

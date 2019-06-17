@@ -1,4 +1,5 @@
 package com.mygdx.rtsgame.assets;
+
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
@@ -51,12 +52,13 @@ public class GameAssetManager {
     public static final AssetDescriptor<Sound> tankDestroyedSound =
             new AssetDescriptor<Sound>("data/sounds/destroyedSound.mp3", Sound.class);
 
-
     //skin
     public static final AssetDescriptor<Skin> composerSkin =
             new AssetDescriptor<Skin>("skins/skin-composer/skin/skin-composer-ui.json", Skin.class);
     public static final AssetDescriptor<Skin> tracerSkin =
             new AssetDescriptor<Skin>("skins/tracer/skin/tracer-ui.json", Skin.class);
+
+    //
 
     private GameAssetManager() throws IllegalAccessException{
 

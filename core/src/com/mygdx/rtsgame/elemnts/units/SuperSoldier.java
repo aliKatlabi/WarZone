@@ -20,12 +20,12 @@ public final class SuperSoldier extends ArmyUnit {
         setMoveSpeed(ArmyUnits.SUPER_SOLDIER.moveSpeed);
         setSpawnTime(ArmyUnits.SUPER_SOLDIER.spawnTime);
         scale = 0.8f;
-        unitTexture     = GameWorld.assetManager.manager.get(GameAssetManager.soldierTexture);
+        unitTexture     = GameAssetManager.getInstance().manager.get(GameAssetManager.soldierTexture);
         setBounds(px, py, unitTexture.getWidth()-5, unitTexture.getHeight()-5);
         shootingSound = Gdx.audio.newSound(Gdx.files.internal("data/sounds/9_mm_gunshot-mike-koenig-123.mp3"));
 
-        movingSound     = GameWorld.assetManager.manager.get(GameAssetManager.movingSound);
-        destroyedSound  = GameWorld.assetManager.manager.get(GameAssetManager.destroyedSound);
+        movingSound     = GameAssetManager.getInstance().manager.get(GameAssetManager.movingSound);
+        destroyedSound  = GameAssetManager.getInstance().manager.get(GameAssetManager.destroyedSound);
 
         setUnitBody( creatBody(BodyDef.BodyType.DynamicBody));
         this.installCircularBody(getUnitBody(),10,getWidth()/2,true);

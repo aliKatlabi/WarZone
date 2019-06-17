@@ -9,7 +9,7 @@ public final class SuperFireBullet extends Bullet {
     public SuperFireBullet(float px, float py) {
         super(px, py);
 
-        setBullet(GameWorld.assetManager.manager.get(GameAssetManager.bulletTexture));
+        setBullet(GameAssetManager.getInstance().manager.get(GameAssetManager.bulletTexture));
         setDamage(Bullets.SUPERFIRE_B.damage);
         setVelocity(Bullets.SUPERFIRE_B.velocity);
     }

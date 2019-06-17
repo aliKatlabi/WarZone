@@ -8,7 +8,7 @@ import com.mygdx.rtsgame.Player;
 
 public final  class ResourceFactory extends Building {
 
-    //public final static int price = Buildings.RESOURSEFACTORY.price;
+    //public final static int price = Buildings.RESOURCE_FACTORY.price;
     private float moneyTime=0;
     private static final float moneyDelivered=5f;
     private final int profits=140;
@@ -40,7 +40,7 @@ public final  class ResourceFactory extends Building {
         moneyTime += delta;
         if (getPlayerId() == getGameWorld().currentPlayer) {
             if (moneyTime > moneyDelivered && isConstructed()) {
-                getGameWorld().setResorces(getGameWorld().getResorces() + profits);
+                getGameWorld().setResources(getGameWorld().getResources() + profits);
                 moneyTime = 0;
             }
 
