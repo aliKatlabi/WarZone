@@ -7,10 +7,6 @@ import com.mygdx.rtsgame.elemnts.bullets.Bullet;
 
 public interface ArmyUnitTool {
 
-     float  SHOOTING_RANGE     = 80f;
-     float  DESTRUCTION_TIME   = 0.7f;
-     float  DEVIATION          = 15f;
-
      Body creatBody(BodyDef.BodyType type );
      Bullet loadBullet(float x, float y);
      void installCircularBody(Body body ,int density,float radius,boolean multiBody);

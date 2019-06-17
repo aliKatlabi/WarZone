@@ -171,7 +171,7 @@ public class ControlMenu extends Table   {
     private TextButton barrack(){
 
         CMTextButton b = new CMTextButton("Barrack", skin);
-
+        b.setConfig1(fontScale);
 
         b.addListener(new ClickListener(){
             @Override

@@ -31,30 +31,35 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
     private Bullet bullet ;
     private ShapeRenderer shapeRenderer;
 
-    private boolean spawned = false;
-    private boolean destroyed=false;
-    private boolean selected = false;
-    private boolean moving = false;
-    private boolean shoot = false;
+    private boolean spawned      = false;
+    private boolean destroyed    = false;
+    private boolean selected     = false;
+    private boolean moving       = false;
+    private boolean shoot        = false;
 
     private float elapsedTime=0;
     private float spawnTime ;
     private float destructionPhase=0f;
 
-    private float range ;
-    private float hp;
-    private float fireRate=0.5f;
-    private float moveSpeed;
-    private float volume=0.4f;
-    protected float scale=1;
-    private float mouseX , mouseY;
-    private float bodyRadius ;
+    private     float    range ;
+    private     float    hp;
+    private     float    fireRate=0.5f;
+    private     float    moveSpeed;
+    private     float    volume=0.4f;
+    protected   float    scale=1;
+    private     float    mouseX , mouseY;
+    private     float    bodyRadius ;
+
+    private     ArmyUnit         enemy;
+    public      MoveToAction     prevMove;
+    private     HealthBar        healthBar;
+    private     VisualShape      visual;
 
 
-    private ArmyUnit enemy;
-    public MoveToAction prevMove;
-    private HealthBar healthBar;
-    private VisualShape visual;
+    private static final float  SHOOTING_RANGE     = 80f;
+    private static final float  DESTRUCTION_TIME   = 0.7f;
+    private static final float  DEVIATION          = 15f;
+
 
     public ArmyUnit(float px, float py, Player playerId) {
         //ArmyUnit to Unit or ArmyUnit
@@ -74,7 +79,6 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
     }
 
     protected ArmyUnit() {  }
-
 
     @Override
     public void draw(Batch batch, float alpha) {

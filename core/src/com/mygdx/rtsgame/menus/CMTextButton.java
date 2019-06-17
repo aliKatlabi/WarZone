@@ -8,16 +8,16 @@ import com.badlogic.gdx.utils.Align;
 
 public class CMTextButton extends TextButton {
 
-    private Label lable;
+    private Label label;
 
-    public CMTextButton(String text, Skin skin) {
+    CMTextButton(String text, Skin skin) {
         super(text, skin);
-        lable = new Label(text,skin);
+        label = new Label(text,skin);
     }
 
     public CMTextButton(String text, Skin skin, String styleName) {
         super(text, skin, styleName);
-        lable = new Label(text,skin);
+        label = new Label(text,skin);
     }
 
     public CMTextButton(String text, TextButtonStyle style) {
@@ -27,10 +27,10 @@ public class CMTextButton extends TextButton {
 
     void setConfig1(float fontScale){
 
-        lable.setColor(0.8f,0.2f,0.2f,1);
-        lable.setFontScale(fontScale);
-        lable.setAlignment(Align.center);
-        setLabel(lable);
+        label.setColor(0.8f,0.2f,0.2f,1);
+        label.setFontScale(fontScale);
+        label.setAlignment(Align.center);
+        setLabel(label);
         setColor(Color.BLACK);
     }
 }
