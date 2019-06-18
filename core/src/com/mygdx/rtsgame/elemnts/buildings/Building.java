@@ -18,9 +18,9 @@ import static java.lang.Math.abs;
 
 public abstract class Building extends ArmyUnit {
 
-    private Texture  inConstructTexture = new Texture(Gdx.files.internal("buildings/orange defense base.png"));
-    private Texture texture=new Texture(Gdx.files.internal("buildings/manufactory02.png"));
-    private Sound destroyedSound = Gdx.audio.newSound(Gdx.files.internal("data/sounds/unitExpolded.mp3"));
+    private Texture     inConstructTexture = new Texture(Gdx.files.internal("buildings/orange defense base.png"));
+    private Texture     texture=new Texture(Gdx.files.internal("buildings/manufactory02.png"));
+    private Sound       destroyedSound = Gdx.audio.newSound(Gdx.files.internal("data/sounds/unitExpolded.mp3"));
 
     private float hp ;
     private Player playerId;
@@ -28,12 +28,12 @@ public abstract class Building extends ArmyUnit {
     private float constructionTime;
     private boolean destroyed = false;
     private boolean constructed=false;
-    private GameWorld gameWorld=GameWorld.getInstance();
-    private Body BuildingBody;
-    private ShapeRenderer shapeRenderer;
     private static final float DEVIATION = 50f;
 
-    private HealthBar healthBar;
+    private GameWorld       gameWorld=GameWorld.getInstance();
+    private Body            BuildingBody;
+    private ShapeRenderer   shapeRenderer;
+    private HealthBar       healthBar;
 
     Building(float px, float py, Player pid){
         shapeRenderer = new ShapeRenderer();
@@ -138,7 +138,6 @@ public abstract class Building extends ArmyUnit {
     public void setDestroyed(boolean destroyed) {
         this.destroyed = destroyed;
     }
-
 
     public float getHp() {
         return hp;

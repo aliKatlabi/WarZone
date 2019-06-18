@@ -80,6 +80,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     protected ArmyUnit() {  }
 
+
     @Override
     public void draw(Batch batch, float alpha) {
 
@@ -89,7 +90,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
             shapeRenderer.setProjectionMatrix(gameWorld.getCamera().combined);
 
             shapeRenderer.end();
-            shapeRenderer.begin();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
             batch.end();
             batch.begin();
@@ -121,20 +122,16 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
     @Override
     public void act(float delta) {
         super.act(delta);
-
         elapsedTime += delta;
 
         if(elapsedTime > spawnTime) {///if the army unit exist
-
             setSpawned(true);//set that it is spawned
-
             /////////handle moving and in position vertical movement
             if (getX() == mouseX && getY() == mouseY)
             {
                 moving = false;
             }
-
-            if (!moving) {
+            if (!moving){
                 if (elapsedTime % 3 < 1)
                     staticMove(getX(), getY() + 10);
                 if (elapsedTime % 3 > 1)
@@ -142,7 +139,6 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
             }
         }
         //////enemy state
-
         if (enemy != null) {
             if (!enemy.isDestroyed())
                 shoot();
@@ -157,7 +153,6 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
             destructionPhase += delta;
         }
 
-
         if(destructionPhase>DESTRUCTION_TIME) {
             setSpawned(false);
 
@@ -167,16 +162,12 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     }
 
-
-
-    public void moveTo(float mouseX, float mouseY, boolean sound) {
+    public  void moveTo(float mouseX, float mouseY, boolean sound) {
 
         this.mouseX = mouseX;
         this.mouseY = mouseY;
 
         moving = true;
-
-        //if (moving){
 
         setBounds(this.getX(), this.getY(),
                  unitTexture.getWidth() * scale,
@@ -191,7 +182,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
         if (sound && movingSound != null)
             movingSound.play(volume);
 
-        //}
+
     }
 
     public void pump(ArmyUnit u ){
@@ -202,17 +193,18 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
         Vector2 path = v2.sub(v1);
         path.nor();
 
+        float leftDuration;
         if(prevMove!=null) {
+            leftDuration = prevMove.getDuration()-prevMove.getTime();
             prevMove.setTime(0f);
+            prevMove.setDuration(leftDuration);
             prevMove.setStartPosition(getX(),getY());
         }
 
-        //prevMove.setDuration(prevMove.getTime());
+
         setBounds(this.getX(), this.getY(), unitTexture.getWidth() * scale, unitTexture.getHeight() * scale);
         MoveToAction move = new MoveToAction();
-        move.setPosition(getX() - 1000*translate(this, u).X, getY() - 1000*translate(this, u).Y);
-        //move.setPosition(10000*path.x, 10000*path.y);
-        move.setDuration(3f);
+        move.setPosition(getX() - translate(this, u).X, getY() - translate(this, u).Y);
         this.addAction(move);
 
     }
@@ -242,12 +234,12 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
             if(elapsedTime>fireRate){
 
-
                 bullet = loadBullet( getX()+getWidth()/2, getY()+getHeight()/2);
 
                 gameWorld.spawn(bullet);
 
-                bullet.moveTo(enemy.getX() + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() / 2, false);
+                if(enemy!=null)
+                    bullet.moveTo(enemy.getX() + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() / 2, false);
 
                 elapsedTime = 0;
 
@@ -287,9 +279,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
     }
 
     @Override
-    public Bullet loadBullet(float x, float y) {
-        return null;
-    }
+    public  Bullet loadBullet(float x, float y){return null;}
 
     @Override
     public  boolean hit(Vector3 clickPos){
@@ -340,7 +330,9 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     public void dispose(){
 
-       shapeRenderer.dispose();
+        enemy = null;
+        destroy();
+//        shapeRenderer.dispose();
 
 
     }

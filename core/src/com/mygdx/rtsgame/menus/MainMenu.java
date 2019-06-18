@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.RTSGame;
+import com.mygdx.rtsgame.assets.GameAssetManager;
 import com.mygdx.rtsgame.screens.EndScreen;
 import com.mygdx.rtsgame.screens.LoadingScreen;
 
@@ -103,8 +104,7 @@ public class MainMenu extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y){
 
-                GameWorld.getInstance().disposeArmyUnits();
-                game.getScreen().dispose();
+                GameAssetManager.getInstance().dispose();
                 game.setScreen(new EndScreen(game));
             }
         });

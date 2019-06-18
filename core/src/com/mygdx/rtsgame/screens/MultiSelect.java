@@ -1,6 +1,5 @@
 package com.mygdx.rtsgame.screens;
 
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ public interface MultiSelect<E> {
      * @return true if the E is inside the selection rectangle
      */
     boolean contain(E unit);
+
 
     /**
      * clears the selected Elements list

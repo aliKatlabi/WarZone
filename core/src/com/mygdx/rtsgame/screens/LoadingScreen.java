@@ -24,9 +24,7 @@ public class LoadingScreen  extends Stage implements Screen {
         progressBar = new ShapeRenderer();
         progressBar.setAutoShapeType(true);
         GameWorld gameWorld = GameWorld.getInstance();
-
         gameWorld.loadMap(map);
-
         gameAssetManager.load();
     }
 
@@ -55,7 +53,6 @@ public class LoadingScreen  extends Stage implements Screen {
 
             progressBar.dispose();
             GameScreen gs = new GameScreen(game);
-            gs.setVolume(0.2f);
             game.setScreen(gs);
         }
 

@@ -19,7 +19,7 @@ public final class FireBullet extends Bullet {
     }
 
     @Override
-    public void transEffect(Batch batch, float ellapsedTime) {
+    public void transEffect(Batch batch, float elapsedTime) {
 
     }
 

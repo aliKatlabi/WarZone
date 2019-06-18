@@ -19,8 +19,8 @@ public class GameMapRenderer extends OrthogonalTiledMapRenderer {
 
     private World world;
     private ArrayList<ArmyUnit> warElements;
-    private final int drawSpritesAfterLayer=1;
-    private static  int i = 0;
+
+    private static  int mapObjectsCount = 0;
 
     GameMapRenderer(TiledMap map , World w  ) {
         super(map);
@@ -46,6 +46,7 @@ public class GameMapRenderer extends OrthogonalTiledMapRenderer {
                 if (layer instanceof TiledMapTileLayer) {
                     renderTileLayer((TiledMapTileLayer) layer);
                     currentLayer++;
+                    final int drawSpritesAfterLayer=1;
                     if (currentLayer == drawSpritesAfterLayer) {
                         for (ArmyUnit p : warElements) {
                                 p.draw(this.getBatch(), 0);
@@ -65,9 +66,10 @@ public class GameMapRenderer extends OrthogonalTiledMapRenderer {
         }
         endRender();
     }
+
     private  void installStaticBodies(){
 
-        if(i == 0) {
+        if(mapObjectsCount== 0) {
             for (MapObject mo : map.getLayers().get("Object Layer").getObjects()) {
                 if(mo instanceof PolygonMapObject) {
 
@@ -90,14 +92,13 @@ public class GameMapRenderer extends OrthogonalTiledMapRenderer {
                     shape.dispose();
                 }
 
-                i++;
+                mapObjectsCount++;
             }
 
         }
     }
 
     public Rectangle getViewBounds(){
-
 
         return this.viewBounds;
     }

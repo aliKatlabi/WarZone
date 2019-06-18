@@ -1,7 +1,6 @@
 package com.mygdx.rtsgame.menus;
 
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -24,7 +23,7 @@ public class ControlMenu extends Table   {
     private GameScreen gameScreen;
     private final Skin skin ;
     private final float fontScale = 0.7f;
-    private Label resources;
+
 
     public ControlMenu(GameScreen gs){
 
@@ -33,9 +32,7 @@ public class ControlMenu extends Table   {
         final float BUTTON_WIDTH=75f;
 
         skin = GameAssetManager.getInstance().manager.get(GameAssetManager.tracerSkin);
-        resources = new Label("|Resources|",skin);
-        resources.setFontScale(fontScale);
-        resources.setColor(Color.BLACK);
+
         this.setFillParent(true);
 
         center();
@@ -199,11 +196,7 @@ public class ControlMenu extends Table   {
         return b;
     }
 */
-    public void updateState() {
 
-        resources.setText("| Resources | " + GameWorld.getInstance().getResources());
-
-    }
 
 
 }

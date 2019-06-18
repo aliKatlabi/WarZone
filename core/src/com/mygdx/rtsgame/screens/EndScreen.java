@@ -31,7 +31,7 @@ public class EndScreen extends Stage implements Screen {
 
         elapseTime+=delta;
 
-        if(elapseTime==3f){
+        if(elapseTime>3f){
             elapseTime=0;
             dispose();
             Gdx.app.exit();

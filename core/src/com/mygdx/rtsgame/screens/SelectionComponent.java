@@ -1,6 +1,5 @@
 package com.mygdx.rtsgame.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -36,10 +35,7 @@ public class SelectionComponent<E> implements MultiSelect<E> {
     public void render(float touchMoveX , float touchMoveY) {
         rectangle.end();
         rectangle.begin(ShapeRenderer.ShapeType.Line);
-
-        rectangle.rect(touchMoveX, Gdx.graphics.getHeight() - touchMoveY, resizeW, resizeH);
-
-
+        rectangle.rect(touchMoveX, touchMoveY, resizeW, resizeH);
 
     }
 
@@ -61,12 +57,10 @@ public class SelectionComponent<E> implements MultiSelect<E> {
             e.printStackTrace();
         }
 
-
         boolean left     = touchDown.x > touchUp.x;
         boolean right    = touchDown.x < touchUp.x;
         boolean down     = touchDown.y > touchUp.y;
         boolean up       = touchDown.y < touchUp.y;
-
 
         boolean a = left&&(pos.x <touchDown.x && pos.x>touchUp.x);
         boolean c = right&&(pos.x >touchDown.x && pos.x<touchUp.x);
@@ -87,8 +81,9 @@ public class SelectionComponent<E> implements MultiSelect<E> {
     @Override
     public void resize(float touchMoveX, float touchMoveY,float dragX,float dragY){
 
+
         resizeW = dragX - touchMoveX;
-        resizeH = touchMoveY - dragY;
+        resizeH = dragY - touchMoveY  ;
     }
     @Override
     public boolean clearIn()
@@ -106,7 +101,7 @@ public class SelectionComponent<E> implements MultiSelect<E> {
                     } catch (InvocationTargetException e1) {
                         e1.printStackTrace();
                     } catch (NoSuchMethodException e1) {
-                        System.out.println(e1.getMessage());
+                        System.out.println("provide setSelected() method : " + e1.getMessage());
                         inSelect.clear();
                         return true;
                     }
@@ -141,7 +136,6 @@ public class SelectionComponent<E> implements MultiSelect<E> {
 
         pos.x = (Float) unit.getClass().getMethod("getX").invoke(unit);
         pos.y = (Float) unit.getClass().getMethod("getY").invoke(unit);
-        //pos.z = (Float) unit.getClass().getMethod("getZ").invoke(unit);
 
     }
 

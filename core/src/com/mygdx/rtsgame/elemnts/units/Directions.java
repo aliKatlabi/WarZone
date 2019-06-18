@@ -1,12 +1,14 @@
 package com.mygdx.rtsgame.elemnts.units;
 
+import com.badlogic.gdx.math.Vector2;
+
 public enum Directions {
 
     NOD(0,0),UR(1,1),UL(-1,1),DR(1,-1),DL(-1,-1)
     ,U(0,1),D(0,-1),L(-1,0),R(1,0);
 
-    protected float X;
-    protected float Y;
+    public float X;
+    public float Y;
 
     public static Directions translate(ArmyUnit u , ArmyUnit e)
     {
@@ -35,6 +37,32 @@ public enum Directions {
 
         return Directions.NOD; }
 
+
+    public static Directions translate(Vector2 me , Vector2 him)
+    {
+        //e.getX()+e.getWidth()/2 & e.getY()+ e.getHeight()/2
+        //to make the zero of the unit in its  center
+
+        if(me.x<him.x && (me.y)<him.y)
+            return Directions.DL;
+        if(me.x<him.x && (me.y)>him.y)
+            return Directions.UL;
+        if(me.x>him.x && (me.y)>him.y)
+            return Directions.UR;
+        if(me.x>him.x && (me.y)<him.y)
+            return Directions.DR;
+        /*
+        if((e.getX()+e.getWidth()/2)>u.getX() && (e.getY()+ e.getHeight()/2) == u.getY())
+            return Directions.R;
+        if((e.getX()+e.getWidth()/2)<u.getX() && (e.getY()+ e.getHeight()/2) == u.getY())
+            return Directions.L;
+        if((e.getX()+e.getWidth()/2) == u.getX() && (e.getY()+ e.getHeight()/2)<u.getY())
+            return Directions.U;
+        if((e.getX()+e.getWidth()/2) == u.getX() && (e.getY()+ e.getHeight()/2)>u.getY())
+            return Directions.D;
+
+*/
+        return Directions.NOD; }
 
 
     Directions(float x , float y) {

@@ -10,8 +10,8 @@ public final class SuperFireBullet extends Bullet {
         super(px, py);
 
         setBullet(GameAssetManager.getInstance().manager.get(GameAssetManager.bulletTexture));
-        setDamage(Bullets.SUPERFIRE_B.damage);
-        setVelocity(Bullets.SUPERFIRE_B.velocity);
+        setDamage(Bullets.SUPER_FIRE_B.damage);
+        setVelocity(Bullets.SUPER_FIRE_B.velocity);
     }
 
     public SuperFireBullet() {
@@ -19,7 +19,7 @@ public final class SuperFireBullet extends Bullet {
     }
 
     @Override
-    public void transEffect(Batch batch, float ellapsedTime) {
+    public void transEffect(Batch batch, float elapsedTime) {
 
     }
 }

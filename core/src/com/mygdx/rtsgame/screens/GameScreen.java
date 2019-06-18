@@ -2,6 +2,7 @@ package com.mygdx.rtsgame.screens;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,10 +23,9 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
     private final RTSGame game;
     private ControlMenu controlMenu;
     private EscapeMenu escMenu;
-    private int mouseMoveX,mouseMoveY;
+    private InfoSection infoSection;
     private static final float MARGIN = 50f;
-
-    private float volume;
+    private float volume=0.2f;
     public static boolean TAB=false;
     public static boolean ESC=false;
     private ControlStage controlStage;
@@ -39,6 +39,11 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
     private Sound         gameSong          = GameAssetManager.getInstance().manager.get(GameAssetManager.gameSound);
     private final Skin    skin              = GameAssetManager.getInstance().manager.get(GameAssetManager.composerSkin);
 
+
+    //
+    private Vector3 move = new Vector3();
+    private Vector3 drag  = new Vector3();
+
     GameScreen(final RTSGame game) {
 
 
@@ -47,9 +52,12 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
         controlStage = new ControlStage();
         controlMenu = new ControlMenu(this);
         escMenu = new EscapeMenu(this);
+        infoSection = new InfoSection(0.9f,skin, Color.BLACK);
         //endGameDialog = new EndGameDialog("war zone",skin,this);
+
         controlStage.addActor(controlMenu);
         controlStage.addActor(escMenu);
+        controlStage.addActor(infoSection);
         //controlStage.addActor(endGameDialog);
 
         gameSong.loop(volume);
@@ -87,11 +95,9 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
         gameWorld.worldRender(); // gameWorld.worldRender() show go after gameWorld.draw()
         controlStage.act(delta);
         controlStage.draw();    //controlStage.draw() GO after all draw methods
-        controlMenu.updateState();
-       // endGameDialog.updateState();
-
-        multiSelect.render(mouseMoveX,mouseMoveY);
-
+        // endGameDialog.updateState();
+        infoSection.updateState();
+        multiSelect.render(move.x,move.y);
 
         if(!TAB) {
             //Gdx.input.setInputProcessor(this);
@@ -142,7 +148,10 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
         gameWorld.dispose();
         gameSong.dispose();
         skin.dispose();
-
+        getMultiSelect().clearIn();
+        infoSection.dispose();
+        TAB =false;
+        ESC =false;
     }
 
     @Override
@@ -303,12 +312,12 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
 
     }
 
-
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
-        multiSelect.resize(mouseMoveX,mouseMoveY,screenX,screenY);
-
+        drag.set(screenX,screenY,0);
+        drag.set(getCamera().unproject(drag));
+        multiSelect.resize(move.x,move.y,drag.x,drag.y);
 
         return true;
     }
@@ -316,21 +325,21 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
     @Override
     public boolean mouseMoved(int screenX, int screenY){
 
-        mouseMoveX = screenX;
-        mouseMoveY = screenY;
 
+        move.set(screenX,screenY,0);
+        move.set(getCamera().unproject(move));
 
-            if (mouseMoveX > Gdx.graphics.getWidth() - 30) {//to move right
+            if (screenX > Gdx.graphics.getWidth() - 30) {//to move right
                 gameWorld.getCamera().translate(10, 0);
             }
-            if (mouseMoveX < 30) {//to move left
+            if (screenX < 30) {//to move left
                 gameWorld.getCamera().translate(-10, 0);
             }
 
-            if (mouseMoveY > Gdx.graphics.getHeight() - 30) {//to move down
+            if (screenY > Gdx.graphics.getHeight() - 30) {//to move down
                 gameWorld.getCamera().translate(0, -10);
             }
-            if (mouseMoveY < 30) {//to move up
+            if (screenY < 30) {//to move up
                 gameWorld.getCamera().translate(0, 10);
             }
 

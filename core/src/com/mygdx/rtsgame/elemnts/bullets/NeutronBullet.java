@@ -2,7 +2,6 @@ package com.mygdx.rtsgame.elemnts.bullets;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.assets.GameAssetManager;
 
 public final class NeutronBullet extends Bullet{
@@ -26,8 +25,7 @@ public final class NeutronBullet extends Bullet{
     }
 
     @Override
-    public void transEffect(Batch batch, float ellapsedTime) {
-
+    public void transEffect(Batch batch, float elapsedTime) {
 
     }
 }

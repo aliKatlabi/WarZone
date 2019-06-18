@@ -40,7 +40,7 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
     }
 
     @Override
-    public void moveTo(float mouseX, float mouseY,boolean sound){
+    public void moveTo(float mouseX , float mouseY, boolean sound){
 
             MoveToAction move = new MoveToAction();
             move.setPosition(mouseX, mouseY);
@@ -88,10 +88,7 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
 
 
     @Override
-    public void transEffect(Batch batch , float ellapsedTime) {
-
-
-    }
+    public abstract void transEffect(Batch batch , float elapsedTime);
 
     @Override
     public void shatter(boolean collided) {

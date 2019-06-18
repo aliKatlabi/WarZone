@@ -16,6 +16,7 @@ import com.mygdx.rtsgame.elemnts.buildings.Building;
 import com.mygdx.rtsgame.elemnts.buildings.Buildings;
 import com.mygdx.rtsgame.elemnts.bullets.Bullet;
 import com.mygdx.rtsgame.elemnts.units.ArmyUnit;
+import com.mygdx.rtsgame.elemnts.units.Directions;
 import com.mygdx.rtsgame.menus.Maps;
 import static java.lang.StrictMath.abs;
 
@@ -24,7 +25,7 @@ public class GameWorld extends Stage implements InputProcessor {
 
 
     public Maps currentMap;
-    public Player currentPlayer;
+
     public Buildings buildingInConstruction;
     public  World world;
     private TiledMap gameMap;
@@ -33,10 +34,11 @@ public class GameWorld extends Stage implements InputProcessor {
     private int resources=1000000;
     public boolean hasUnits = false;
 
-
-    public   static      int currentPlayersUnitsCount=0;
-    public   static      int enemyUnitsCount=0;
-    private  static      GameWorld SINGLE_INS = null;
+    public         Player     currentPlayer = Player.PLAYER1;
+    public   static      int        currentPlayersUnitsCount=0;
+    public   static      int        enemyUnitsCount=0;
+    private  static      float      RANDOM_POSITIONING =3.5f;
+    private  static      GameWorld  SINGLE_INS = null;
 
     private GameWorld (){ }
 
@@ -130,11 +132,15 @@ public class GameWorld extends Stage implements InputProcessor {
         hasUnits=true;
         mapRenderer.addUnitToMapRenderer(building);
 
-        if (building.getPlayerId() == Player.PLAYER1) {
+        building.getPlayerId().plus();
+        /*
+        if (building.getPlayerId() == currentPlayer) {
             currentPlayersUnitsCount++;
+            currentPlayer.plus();
         } else {
             enemyUnitsCount++;
         }
+        */
 
     }
 
@@ -145,6 +151,8 @@ public class GameWorld extends Stage implements InputProcessor {
         mapRenderer.addUnitToMapRenderer(p);
         hasUnits = true;
 
+        p.getPlayerId().plus();
+        /*
         if (p.getPlayerId() == Player.PLAYER1) {
             if(currentPlayersUnitsCount++>0)
                 hasUnits=true;
@@ -153,25 +161,31 @@ public class GameWorld extends Stage implements InputProcessor {
             if(enemyUnitsCount++>0)
                 hasUnits=true;
         }
+        */
     }
 
     private void despawn(ArmyUnit p){
         p.destroy();
         mapRenderer.removeUnitFromMapRenderer(p);
 
+        p.getPlayerId().minus();
+        /*
         if (p.getPlayerId() == Player.PLAYER1) {
             if(currentPlayersUnitsCount--==0)
                 hasUnits=false;
         } else {
             if(enemyUnitsCount--==0)
                 hasUnits=false;
-        }
+        }*/
     }
 
     public void dispose(){
 
         if(SINGLE_INS!=null)
         {
+            for (ArmyUnit u : getArmyUnits())
+                u.dispose();
+
             getArmyUnits().clear();
             GameAssetManager.getInstance().manager.clear();
             mapRenderer.dispose();
@@ -180,12 +194,6 @@ public class GameWorld extends Stage implements InputProcessor {
 
     }
 
-    public void disposeArmyUnits(){
-
-        for (ArmyUnit u : getArmyUnits())
-            u.dispose();
-
-    }
 
     private ContactListener myContactListener() {
 
@@ -198,41 +206,86 @@ public class GameWorld extends Stage implements InputProcessor {
                 /////////////////  TWO UNITS COLLIDING
                 if (contact.getFixtureA().getDensity() == 10f && contact.getFixtureB().getDensity() == 10f) {
                     //////////////////////////
-                    ArmyUnit p = (ArmyUnit) (contact.getFixtureA().getBody().getUserData());
-                    ArmyUnit p1 = (ArmyUnit) (contact.getFixtureB().getBody().getUserData());
+                    ArmyUnit p1 = (ArmyUnit) (contact.getFixtureA().getBody().getUserData());
+                    ArmyUnit p2 = (ArmyUnit) (contact.getFixtureB().getBody().getUserData());
 
-                    p.pump(p1);
-                    p1.pump(p);
+                    Vector2 p1v = new Vector2(p1.getX(),p1.getY());
+                    Vector2 p2v = new Vector2(p2.getX(),p2.getY());
+
+                    p1.pump(p2);
+                    p2.pump(p1);
 
 
-                    if(p.prevMove!=null&&p.isMoving())
-                        p.moveTo(p.prevMove.getX(),p.prevMove.getY(),false);
-                    if(p1.prevMove!=null&& p1.isMoving())
-                        p1.moveTo(p1.prevMove.getX(),p1.prevMove.getY(),false);
+                    if(p1.prevMove!=null&&p1.isMoving()){
+
+
+                        Vector2 pm = new Vector2(p1.prevMove.getX(),p1.prevMove.getY());
+                        Directions d = Directions.translate(p1v,pm);
+
+                        p1.moveTo(p1.prevMove.getX() + (float)(RANDOM_POSITIONING*Math.random())*d.X,
+                                  p1.prevMove.getY() + (float)(RANDOM_POSITIONING*Math.random())*d.Y,
+                                false);
+                    }
+                    if(p2.prevMove!=null&& p2.isMoving()){
+
+                        Vector2 p2m = new Vector2(p2.prevMove.getX(),p2.prevMove.getY());
+                        Directions d = Directions.translate(p2v,p2m);
+
+                        p2.moveTo(p2.prevMove.getX(),
+                                  p2.prevMove.getY() ,
+                                false);
+                    }
 
 
                 }
                 ///////////////////////COLLIDING WITH MAP OBJECT
-                if (contact.getFixtureA().getDensity() == 20000f) {
+                if (contact.getFixtureA().getDensity() == 20000f  && contact.getFixtureB().getDensity() == 10f) {
+
                     ArmyUnit p = (ArmyUnit) (contact.getFixtureB().getBody().getUserData());
-                    p.moveTo(p.getX() - 10, p.getY() - 10, true);
-                    p.moveTo(p.getX() - 1, p.getY() - 1, true);
+
+                    Vector2 pv = new Vector2(p.getX()+p.getHeight()/2,p.getY()+p.getHeight()/2);
+                    Vector2 pm = new Vector2();
+                    if(p.prevMove!=null)
+                        pm.set(p.prevMove.getX(),p.prevMove.getY());
+                    Directions d = Directions.translate(pv,pm);
+                    p.moveTo(p.getX() + d.X*10, p.getY()+ d.Y*10, false);
+
+                    p.moveTo(p.getX() - 1, p.getY() - 1, false);
                 }
-                if (contact.getFixtureB().getDensity() == 20000f) {
+                if (contact.getFixtureB().getDensity() == 20000f  && contact.getFixtureA().getDensity() == 10f) {
                     ArmyUnit p = (ArmyUnit) (contact.getFixtureA().getBody().getUserData());
-                    p.moveTo(p.getX() - 10, p.getY() - 10, true);
-                    p.moveTo(p.getX() - 1, p.getY() - 1, true);
+
+                    Vector2 pv = new Vector2(p.getX()+p.getHeight()/2,p.getY()+p.getHeight()/2);
+                    Vector2 pm = new Vector2();
+                    if(p.prevMove!=null)
+                        pm.set(p.prevMove.getX(),p.prevMove.getY());
+                    Directions d = Directions.translate(pv,pm);
+                    p.moveTo(p.getX() + d.X*20, p.getY()+ d.Y*20, false);
+
+                    p.moveTo(p.getX() - 1, p.getY() - 1, false);
                 }
                 ///////////////////COLLIDING WITH BUILDING
-                if (contact.getFixtureA().getDensity() == 1000f) {
+                if (contact.getFixtureA().getDensity() == 1000f  && contact.getFixtureB().getDensity() == 10f) {
                     ArmyUnit p = (ArmyUnit) (contact.getFixtureB().getBody().getUserData());
-                    p.moveTo(p.getX() - 10, p.getY() - 10, true);
-                    p.moveTo(p.getX() - 1, p.getY() - 1, true);
+
+                    Vector2 pv = new Vector2(p.getX()+p.getHeight()/2,p.getY()+p.getHeight()/2);
+                    Vector2 pm = new Vector2();
+                    if(p.prevMove!=null)
+                       pm.set(p.prevMove.getX(),p.prevMove.getY());
+
+                    Directions d = Directions.translate(pv,pm);
+                    p.moveTo(p.getX() + d.X*20, p.getY()+ d.Y*20, false);
                 }
-                if (contact.getFixtureB().getDensity() == 1000f) {
+                if (contact.getFixtureB().getDensity() == 1000f  && contact.getFixtureA().getDensity() == 10f) {
                     ArmyUnit p = (ArmyUnit) (contact.getFixtureA().getBody().getUserData());
-                    p.moveTo(p.getX() - 10, p.getY() - 10, true);
-                    p.moveTo(p.getX() - 1, p.getY() - 1, true);
+
+                    Vector2 pv = new Vector2(p.getX()+p.getHeight()/2,p.getY()+p.getHeight()/2);
+                    Vector2 pm = new Vector2();
+                    if(p.prevMove!=null)
+                        pm.set(p.prevMove.getX(),p.prevMove.getY());
+                    Directions d = Directions.translate(pv,pm);
+                    p.moveTo(p.getX() + d.X*20, p.getY()+ d.Y*20, false);
+                    p.moveTo(p.getX() - 1, p.getY() - 1, false);
                 }
             }
             @Override
