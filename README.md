@@ -2,19 +2,29 @@
 real time strategy game 
 developed with <a herf="https://libgdx.badlogicgames.com/">LibGdx</a>
 
+#
+#
+#
 
 
 ## description
 build an army to win the war 
 choose a map and go explore 
 
-
+#
+#
+#
 
 ## controls 
 
-mouse/touch controle : single select or multi select units
-Tab : contrle menu : to build / spawn  
-Esc : escape menu  : to escape to main menue : to choose different map
+#### mouse/touch controle : single select or multi select units
+#### Tab : contrle menu : to build / spawn  
+#### Esc : escape menu  : to escape to main menue
+#### main menue : to choose different map
+
+#
+#
+#
 
 ## viual
 
