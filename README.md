@@ -28,7 +28,7 @@ developed with <a herf="https://libgdx.badlogicgames.com/">LibGdx</a>
 <p> </p>
 <p> </p>
 
-## viual
+## visual
 <p> </p>
 <p> </p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/tImhbrvt-Lk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
