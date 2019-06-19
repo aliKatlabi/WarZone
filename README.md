@@ -33,6 +33,6 @@ developed with <a herf="https://libgdx.badlogicgames.com/">LibGdx</a>
 <p> </p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/tImhbrvt-Lk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <p></p>
-<p><u> video : glitches caused by recording programm </u></p>
+<p><u> video : glitches caused by the recording program </u></p>
 
 
