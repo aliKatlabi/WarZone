@@ -17,12 +17,12 @@ choose a map and go explore
 
 ## controls 
 
-<em> mouse/touch controle </em>: single select or multi select units
-<em> Tab </em>: contrle menu 
-<em> Esc </em>: escape menu 
-<em> main menue </em>: to choose different map
-<em> contrle menu </em> : to build / spawn
-<em> escape menu </em> : to escape to main menue
+<p><strong> mouse/touch controle </strong>: single select or multi select units</p>
+<p><strong> Tab </strong>: contrle menu </p>
+<p><strong>Esc </strong>: escape menu </p>
+<p><strong> main menue </strong>: to choose different map</p>
+<p><strong> contrle menu </strong> : to build / spawn</p>
+<p><strong> escape menu </strong> : to escape to main menue</p>
 
 <p></p>
 <p></p>
@@ -30,8 +30,9 @@ choose a map and go explore
 
 
 ## viual
-
+<p></p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/tImhbrvt-Lk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<p><u>in video : the glitches caused by recording programm </u></p>
+<p></p>
+<p><u> video : glitches caused by recording programm </u></p>
 
 
