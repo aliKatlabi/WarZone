@@ -9,27 +9,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class InfoSectionLabel extends Label {
 
 
-    private ShapeRenderer shapeRenderer=new ShapeRenderer();
+    private ShapeRenderer frame =new ShapeRenderer();
     //private float height;
     //private float width;
 
      InfoSectionLabel(CharSequence text, Skin skin) {
         super(text, skin);
-        shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.setColor(Color.BLACK);
+         frame.setAutoShapeType(true);
 
     }
 
     public void render() {
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.rect( getX(),getY(),
+        frame.begin(ShapeRenderer.ShapeType.Line);
+        frame.rect( getX(),getY(),
                             getOriginX(),
                             getOriginY(),
                 getWidth()+5f, getHeight()+3f,
                             getScaleX(),
                             getScaleY(), 0);
-        shapeRenderer.end();
+        frame.end();
 
     }
 
@@ -39,6 +38,8 @@ public class InfoSectionLabel extends Label {
          setHeight(height);
     }
     public void dispose(){
-        shapeRenderer.dispose();
+        frame.dispose();
     }
+
+    void setFrameColor(Color color){ frame.setColor(color);}
 }

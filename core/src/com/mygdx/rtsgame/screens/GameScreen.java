@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.rtsgame.assets.GameAssetManager;
@@ -29,7 +30,8 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
     public static boolean TAB=false;
     public static boolean ESC=false;
     private ControlStage controlStage;
-    ///Box2DDebugRenderer debugRenderer;
+
+    private Box2DDebugRenderer debugRenderer;
     ///for testing
     //private EndGameDialog endGameDialog;
 
@@ -39,6 +41,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
     private Sound         gameSong          = GameAssetManager.getInstance().manager.get(GameAssetManager.gameSound);
     private final Skin    skin              = GameAssetManager.getInstance().manager.get(GameAssetManager.composerSkin);
 
+    private static final int styleColor = 0X468c3f;
 
     //
     private Vector3 move = new Vector3();
@@ -49,11 +52,13 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
 
         this.game = game;
 
-        controlStage = new ControlStage();
-        controlMenu = new ControlMenu(this);
-        escMenu = new EscapeMenu(this);
-        infoSection = new InfoSection(0.9f,skin, Color.BLACK);
+        controlStage    =   new ControlStage();
+        controlMenu     =   new ControlMenu(this);
+        escMenu         =   new EscapeMenu(this);
+        infoSection     =   new InfoSection(0.9f,skin, Color.BLACK,new Color(styleColor));
+
         //endGameDialog = new EndGameDialog("war zone",skin,this);
+
 
         controlStage.addActor(controlMenu);
         controlStage.addActor(escMenu);
@@ -69,7 +74,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
 
         multiSelect = new SelectionComponent<ArmyUnit>();
         ////////////////physics--Box2d----
-        //debugRenderer = new Box2DDebugRenderer();
+        debugRenderer = new Box2DDebugRenderer();
         ///// simulation
 
         simulateEnemy();
@@ -115,6 +120,7 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
             escMenu.setVisible(true);
 
         }
+
 
         //debugRenderer.render(gameWorld.world, gameWorld.getCamera().combined);
     }
@@ -360,17 +366,14 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
             gameWorld.spawn(new Tank(500, 500,  Player.PLAYER1));
             gameWorld.spawn(new Tank(400, 500,  Player.PLAYER1));
             gameWorld.spawn(new Tank(500, 200,  Player.PLAYER2));
-
             gameWorld.spawn(new Tank(400, 300, Player.PLAYER2));
             gameWorld.build(new WarFactory(700, 700, Player.PLAYER2));
         }
         if(gameWorld.currentMap ==Maps.MAP2 || gameWorld.currentMap ==Maps.MAP3){
 
             gameWorld.spawn(new Tank(955 , 1320, Player.PLAYER2));
-
             gameWorld.spawn(new Tank(1068, 1184, Player.PLAYER2));
             gameWorld.spawn(new Tank(1290, 1106, Player.PLAYER2));
-
             gameWorld.build(new WarFactory(1402,1205,Player.PLAYER2));
             gameWorld.build(new Barrack(897,1422,Player.PLAYER2));
             gameWorld.build(new ResourceFactory(1206,1299,Player.PLAYER2));

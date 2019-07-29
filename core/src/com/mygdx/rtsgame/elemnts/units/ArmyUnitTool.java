@@ -9,7 +9,7 @@ public interface ArmyUnitTool {
 
      Body creatBody(BodyDef.BodyType type );
      Bullet loadBullet(float x, float y);
-     void installCircularBody(Body body ,int density,float radius,boolean multiBody);
+     void installCircularBody(Body body ,float density,float radius,boolean multiBody);
      boolean hit( Vector3 mousePos);
 
 }

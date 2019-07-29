@@ -28,7 +28,7 @@ public final class Tank extends ArmyUnit{
         destroyedSound  = GameAssetManager.getInstance().manager.get(GameAssetManager.tankDestroyedSound);
 
         setUnitBody(creatBody(BodyDef.BodyType.DynamicBody));
-        installCircularBody(getUnitBody(),10,this.getWidth() /2 - 3,true);
+        installCircularBody(getUnitBody(),ArmyUnit.Density.armyU.density,this.getWidth() /2 - 3,true);
        // installCircularBody(getUnitBody(),10,getWidth()/3);
 
     }

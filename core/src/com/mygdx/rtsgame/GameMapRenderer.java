@@ -1,10 +1,14 @@
 package com.mygdx.rtsgame;
 
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
@@ -52,9 +56,13 @@ public class GameMapRenderer extends OrthogonalTiledMapRenderer {
                                 p.draw(this.getBatch(), 0);
                         }
 
-                    } else {
+
+                    }
+
+                    else {
                         for (MapObject object : layer.getObjects()) {
                             renderObject(object);
+
                         }
                         for (ArmyUnit p : warElements) {
                             if (p instanceof Bullet && currentLayer==2)
@@ -64,6 +72,9 @@ public class GameMapRenderer extends OrthogonalTiledMapRenderer {
                 }
             }
         }
+
+
+
         endRender();
     }
 

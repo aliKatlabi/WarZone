@@ -13,6 +13,7 @@ import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.Player;
 import com.mygdx.rtsgame.elemnts.bullets.Bullet;
 import static com.mygdx.rtsgame.elemnts.units.Directions.translate;
+import static com.mygdx.rtsgame.elemnts.units.Directions.turn;
 import static java.lang.Math.*;
 
 
@@ -80,6 +81,12 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     protected ArmyUnit() {  }
 
+    public  enum Density{
+        building(1000f),armyU(10000f),mapO(20000f),bullet(999f);
+
+        public  float density;
+        Density(float density){this.density = density;}
+    }
 
     @Override
     public void draw(Batch batch, float alpha) {
@@ -187,24 +194,20 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
 
     public void pump(ArmyUnit u ){
 
-        Vector2 v1 = new Vector2(this.getX(),this.getY());
-        Vector2 v2 = new Vector2(u.getX(),u.getY());
 
-        Vector2 path = v2.sub(v1);
-        path.nor();
 
-        float leftDuration;
         if(prevMove!=null) {
+
+            float leftDuration;
             leftDuration = prevMove.getDuration()-prevMove.getTime();
             prevMove.setTime(0f);
             prevMove.setDuration(leftDuration);
             prevMove.setStartPosition(getX(),getY());
         }
 
-
         setBounds(this.getX(), this.getY(), unitTexture.getWidth() * scale, unitTexture.getHeight() * scale);
         MoveToAction move = new MoveToAction();
-        move.setPosition(getX() - translate(this, u).X, getY() - translate(this, u).Y);
+        move.setPosition(getX() - 2f*translate(this, u).X, getY() - 2f*translate(this, u).Y);
         this.addAction(move);
 
     }
@@ -302,7 +305,7 @@ public abstract class ArmyUnit extends Actor implements ArmyUnitTool {
         return body;
     }
     @Override
-    public void installCircularBody(Body body,int density,float radius,boolean multiBody){
+    public void installCircularBody(Body body,float density,float radius,boolean multiBody){
         int num;
         if(multiBody)
             num=5;

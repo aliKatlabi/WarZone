@@ -65,6 +65,18 @@ public enum Directions {
         return Directions.NOD; }
 
 
+        public static Directions turn(ArmyUnit me , ArmyUnit him,boolean opposite){
+
+
+        switch (translate(me,him)){
+
+            case UL:  if(opposite) return DL; else return UR;
+            case DL:  if(opposite) return UL; else return DR;
+            case DR:  if(opposite) return UR; else return DL;
+            case UR:  if(opposite) return DR; else return UL;
+            default:return NOD;
+        }
+        }
     Directions(float x , float y) {
 
         this.X=x;

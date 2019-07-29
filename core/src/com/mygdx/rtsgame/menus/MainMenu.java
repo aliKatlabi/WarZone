@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.rtsgame.GameWorld;
 import com.mygdx.rtsgame.RTSGame;
 import com.mygdx.rtsgame.assets.GameAssetManager;
 import com.mygdx.rtsgame.screens.EndScreen;

@@ -17,7 +17,7 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
     private float velocity;
     private float elapsedTime = 0;
     private float existenceTime=2f;
-    private static final float activeTime=0.1f;
+    private static final float activeTime=0.03f;
     private float transitionTime;
 
     Bullet(float px, float py) {
@@ -102,6 +102,7 @@ public abstract class Bullet extends ArmyUnit implements BulletBehaviour {
     @Override
     public void destroy() {
 
+        getUnitBody().setActive(false);
         this.setVisible(false);
         this.setDestroyed(true);
         this.setSpawned(false);

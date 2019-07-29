@@ -37,10 +37,12 @@ public class GameWorld extends Stage implements InputProcessor {
     public         Player     currentPlayer = Player.PLAYER1;
     public   static      int        currentPlayersUnitsCount=0;
     public   static      int        enemyUnitsCount=0;
-    private  static      float      RANDOM_POSITIONING =3.5f;
+    private  static      float      RANDOM_POS =5.5f;
     private  static      GameWorld  SINGLE_INS = null;
 
-    private GameWorld (){ }
+    private GameWorld (){
+
+    }
 
 
     public static GameWorld getInstance()
@@ -59,15 +61,18 @@ public class GameWorld extends Stage implements InputProcessor {
 
         if(SINGLE_INS != null)
         {
-            world = new World(new Vector2(0,0),true);
+            world = new World(new Vector2(0,0),false);
             camera = new OrthographicCamera();
             camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             currentMap = map;
             gameMap = new TmxMapLoader().load(map.path());
             //gameMap = GameWorld.assetManager.manager.get(GameAssetManager.maps);
-            mapRenderer = new GameMapRenderer(SINGLE_INS.gameMap, SINGLE_INS.world);
+
             camera.update();
             world.setContactListener(SINGLE_INS.myContactListener());
+
+
+            mapRenderer = new GameMapRenderer(SINGLE_INS.gameMap, SINGLE_INS.world);
 
 
         }
@@ -101,6 +106,7 @@ public class GameWorld extends Stage implements InputProcessor {
         camera.update();
         mapRenderer.setView(camera);
         mapRenderer.render();
+
     }
 
 
@@ -194,6 +200,9 @@ public class GameWorld extends Stage implements InputProcessor {
 
     }
 
+    private float getRandom(float random){
+        return random*(float)Math.random();
+    }
 
     private ContactListener myContactListener() {
 
@@ -204,7 +213,7 @@ public class GameWorld extends Stage implements InputProcessor {
                 // If so apply a random amount of upward force to both objects... just because
 
                 /////////////////  TWO UNITS COLLIDING
-                if (contact.getFixtureA().getDensity() == 10f && contact.getFixtureB().getDensity() == 10f) {
+                if (contact.getFixtureA().getDensity() == ArmyUnit.Density.armyU.density && contact.getFixtureB().getDensity() == ArmyUnit.Density.armyU.density) {
                     //////////////////////////
                     ArmyUnit p1 = (ArmyUnit) (contact.getFixtureA().getBody().getUserData());
                     ArmyUnit p2 = (ArmyUnit) (contact.getFixtureB().getBody().getUserData());
@@ -215,31 +224,32 @@ public class GameWorld extends Stage implements InputProcessor {
                     p1.pump(p2);
                     p2.pump(p1);
 
+                    Directions d;
 
-                    if(p1.prevMove!=null&&p1.isMoving()){
+                    if(p1.prevMove!=null&&p1.isMoving() ){
 
 
                         Vector2 pm = new Vector2(p1.prevMove.getX(),p1.prevMove.getY());
-                        Directions d = Directions.translate(p1v,pm);
+                        d = Directions.translate(p1v,pm);
 
-                        p1.moveTo(p1.prevMove.getX() + (float)(RANDOM_POSITIONING*Math.random())*d.X,
-                                  p1.prevMove.getY() + (float)(RANDOM_POSITIONING*Math.random())*d.Y,
+                        p1.moveTo(p1.prevMove.getX() + (getRandom(RANDOM_POS))*d.X,
+                                  p1.prevMove.getY() + (getRandom(RANDOM_POS))*d.Y,
                                 false);
                     }
                     if(p2.prevMove!=null&& p2.isMoving()){
 
                         Vector2 p2m = new Vector2(p2.prevMove.getX(),p2.prevMove.getY());
-                        Directions d = Directions.translate(p2v,p2m);
+                        d = Directions.translate(p2v,p2m);
 
-                        p2.moveTo(p2.prevMove.getX(),
-                                  p2.prevMove.getY() ,
+                        p2.moveTo(p2.prevMove.getX() + (getRandom(RANDOM_POS))*d.X,
+                                  p2.prevMove.getY() + (getRandom(RANDOM_POS))*d.Y,
                                 false);
                     }
 
 
                 }
                 ///////////////////////COLLIDING WITH MAP OBJECT
-                if (contact.getFixtureA().getDensity() == 20000f  && contact.getFixtureB().getDensity() == 10f) {
+                if (contact.getFixtureA().getDensity() == 20000f  && contact.getFixtureB().getDensity() == ArmyUnit.Density.armyU.density) {
 
                     ArmyUnit p = (ArmyUnit) (contact.getFixtureB().getBody().getUserData());
 
@@ -252,7 +262,7 @@ public class GameWorld extends Stage implements InputProcessor {
 
                     p.moveTo(p.getX() - 1, p.getY() - 1, false);
                 }
-                if (contact.getFixtureB().getDensity() == 20000f  && contact.getFixtureA().getDensity() == 10f) {
+                if (contact.getFixtureB().getDensity() == 20000f  && contact.getFixtureA().getDensity() == ArmyUnit.Density.armyU.density) {
                     ArmyUnit p = (ArmyUnit) (contact.getFixtureA().getBody().getUserData());
 
                     Vector2 pv = new Vector2(p.getX()+p.getHeight()/2,p.getY()+p.getHeight()/2);
@@ -265,7 +275,7 @@ public class GameWorld extends Stage implements InputProcessor {
                     p.moveTo(p.getX() - 1, p.getY() - 1, false);
                 }
                 ///////////////////COLLIDING WITH BUILDING
-                if (contact.getFixtureA().getDensity() == 1000f  && contact.getFixtureB().getDensity() == 10f) {
+                if (contact.getFixtureA().getDensity() == 1000f  && contact.getFixtureB().getDensity() == ArmyUnit.Density.armyU.density) {
                     ArmyUnit p = (ArmyUnit) (contact.getFixtureB().getBody().getUserData());
 
                     Vector2 pv = new Vector2(p.getX()+p.getHeight()/2,p.getY()+p.getHeight()/2);
@@ -276,7 +286,7 @@ public class GameWorld extends Stage implements InputProcessor {
                     Directions d = Directions.translate(pv,pm);
                     p.moveTo(p.getX() + d.X*20, p.getY()+ d.Y*20, false);
                 }
-                if (contact.getFixtureB().getDensity() == 1000f  && contact.getFixtureA().getDensity() == 10f) {
+                if (contact.getFixtureB().getDensity() == 1000f  && contact.getFixtureA().getDensity() == ArmyUnit.Density.armyU.density) {
                     ArmyUnit p = (ArmyUnit) (contact.getFixtureA().getBody().getUserData());
 
                     Vector2 pv = new Vector2(p.getX()+p.getHeight()/2,p.getY()+p.getHeight()/2);
@@ -298,11 +308,11 @@ public class GameWorld extends Stage implements InputProcessor {
 
                 ///contact between bullet and a armyUnit (10) or building (1000)
                 if (contact.getFixtureA().getDensity() == 1000f && contact.getFixtureB().getDensity() == 999f ||
-                        contact.getFixtureA().getDensity() == 10f && contact.getFixtureB().getDensity() == 999f) {//contact.setFriction(222f);
+                        contact.getFixtureA().getDensity() == ArmyUnit.Density.armyU.density && contact.getFixtureB().getDensity() == 999f) {//contact.setFriction(222f);
 
                     ArmyUnit enemy = (ArmyUnit) (contact.getFixtureA().getBody().getUserData());
                     Bullet b = (Bullet) (contact.getFixtureB().getBody().getUserData());
-                    //b.setVisible(false);
+                    b.setVisible(false);
                     //b.setDestroyed(true);
                     b.setCollided(true);
                     enemy.getDamage(b.damage);
@@ -313,14 +323,14 @@ public class GameWorld extends Stage implements InputProcessor {
 
                 if (contact.getFixtureA().getDensity() == 999f && contact.getFixtureB().getDensity() == 20000f){
                     Bullet b = (Bullet) (contact.getFixtureA().getBody().getUserData());
-                    ///b1.setVisible(false);
+                    b.setVisible(false);
                     //b.setDestroyed(true);
                     b.setCollided(true);
 
                 }
                 if (contact.getFixtureA().getDensity() == 20000f && contact.getFixtureB().getDensity() == 999f){
                     Bullet b = (Bullet) (contact.getFixtureB().getBody().getUserData());
-                    //b1.setVisible(false);
+                     b.setVisible(false);
                      //b.setDestroyed(true);
                      b.setCollided(true);
                 }

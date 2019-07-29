@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.rtsgame.GameWorld;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
@@ -18,16 +17,14 @@ public class InfoSection extends Table {
     private float maxWidth;
     //private float height;
     //private float width;
-
-    public InfoSection(float fontScale,Skin skin,Color color){
+    public InfoSection(float fontScale,Skin skin,Color labelColor,Color frameColor){
 
         this.fontScale = fontScale;
         this.skin = skin;
         this.setFillParent(true);
 
-        resources  = setUp(color);
-        bodyCount  = setUp(color);
-
+        resources  = setUp(labelColor,frameColor);
+        bodyCount  = setUp(labelColor,frameColor);
 
         maxWidth = getMaxWidth(resources.getWidth(),bodyCount.getWidth());
 
@@ -45,16 +42,17 @@ public class InfoSection extends Table {
     private float getMaxWidth(float... width){
         float max=0;
 
-            for(float v:width)
+            for(float v : width)
                 max = Math.max(max , v);
 
         return max;
     }
-    private InfoSectionLabel setUp(Color color){
+    private InfoSectionLabel setUp(Color labelColor,Color frameColor){
 
         InfoSectionLabel label = new InfoSectionLabel("",skin);
         label.setFontScale(fontScale);
-        label.setColor(color);
+        label.setColor(labelColor);
+        label.setFrameColor(frameColor);
         return label;
     }
     public void updateState() {

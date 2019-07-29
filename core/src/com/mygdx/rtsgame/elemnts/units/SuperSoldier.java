@@ -28,7 +28,7 @@ public final class SuperSoldier extends ArmyUnit {
         destroyedSound  = GameAssetManager.getInstance().manager.get(GameAssetManager.destroyedSound);
 
         setUnitBody( creatBody(BodyDef.BodyType.DynamicBody));
-        this.installCircularBody(getUnitBody(),10,getWidth()/2,true);
+        this.installCircularBody(getUnitBody(),ArmyUnit.Density.armyU.density,getWidth()/2,true);
 
     }
 

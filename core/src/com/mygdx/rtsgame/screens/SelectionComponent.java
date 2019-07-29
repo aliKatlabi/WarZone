@@ -33,10 +33,10 @@ public class SelectionComponent<E> implements MultiSelect<E> {
 
     @Override
     public void render(float touchMoveX , float touchMoveY) {
-        rectangle.end();
+
         rectangle.begin(ShapeRenderer.ShapeType.Line);
         rectangle.rect(touchMoveX, touchMoveY, resizeW, resizeH);
-
+        rectangle.end();
     }
 
     @Override
@@ -46,9 +46,6 @@ public class SelectionComponent<E> implements MultiSelect<E> {
              updatePos(unit);
 
         } catch (NoSuchMethodException e) {
-
-            e.printStackTrace();
-        }catch (InvocationTargetException e) {
 
             e.printStackTrace();
 
@@ -67,7 +64,7 @@ public class SelectionComponent<E> implements MultiSelect<E> {
         boolean b = up&&(pos.y>touchDown.y && pos.y<touchUp.y);
         boolean d = down &&(pos.y<touchDown.y && pos.y>touchUp.y);
 
-        return b&&a||c&&a||a&&d||c&&d;
+        return b&&a||c&&b||a&&d||c&&d;
 
     }
 
@@ -132,10 +129,34 @@ public class SelectionComponent<E> implements MultiSelect<E> {
         outSelect.add(unit);
     }
 
-    private void updatePos(E unit) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private void updatePos(E unit) throws NoSuchMethodException , IllegalAccessException {
 
-        pos.x = (Float) unit.getClass().getMethod("getX").invoke(unit);
-        pos.y = (Float) unit.getClass().getMethod("getY").invoke(unit);
+        try {
+            pos.x = (Float) unit.getClass().getMethod("getX").invoke(unit);
+        } catch (InvocationTargetException e) {
+
+            try {
+                pos.x = unit.getClass().getField("x").getFloat(unit);
+
+            } catch (NoSuchFieldException e1) {
+
+                System.err.println(e1.getMessage() + "/n no x position for this object");
+                e1.printStackTrace();
+            }
+        }
+
+        try {
+            pos.y = (Float) unit.getClass().getMethod("getY").invoke(unit);
+        } catch (InvocationTargetException e) {
+
+            try {
+                pos.y = unit.getClass().getField("y").getFloat(unit);
+            } catch (NoSuchFieldException e1) {
+
+                System.err.println(e1.getMessage() + "/n no y position for this object");
+                e1.printStackTrace();
+            }
+        }
 
     }
 

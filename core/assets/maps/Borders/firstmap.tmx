@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="61">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="65">
  <tileset firstgid="1" source="tileset.tsx"/>
  <layer id="1" name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
@@ -14,11 +14,6 @@
  <layer id="8" name="rocks" width="32" height="32">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2DwgbtEqjtDI/vfEpA/B8V3aOgGfHbfg2IGJDfQwx0wu9HBHSgeCLtpYc85GtgNMuMNEepgcXsOCVPD3yAz/pCoHjmdUQOghyu9AT3SDy5AbJlGCwAKd0JlGi3AXQb65Vt0AMprb7HYzQjETEDMTEN7/zLgzmuCQCwExMI0sh9fHofZrQTEq2hk/1k8copIdi+gkf1/kdjodSLM/i4gXkcj+5EBep1oCMRGdLQfHTgCsRMQ7wLiCQNgfyAQByG5gRaAUDsoCeqGYBrZT6gdlAh1QzKN7AeBv4SV0BQMpP0gu/GVQfRyw1AAAKWTQQo=
-  </data>
- </layer>
- <layer id="10" name="10" width="32" height="32">
-  <data encoding="base64" compression="zlib">
-   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
   </data>
  </layer>
  <objectgroup id="9" name="Object Layer">
