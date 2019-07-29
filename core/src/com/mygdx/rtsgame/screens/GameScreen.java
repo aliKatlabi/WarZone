@@ -59,7 +59,6 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
 
         //endGameDialog = new EndGameDialog("war zone",skin,this);
 
-
         controlStage.addActor(controlMenu);
         controlStage.addActor(escMenu);
         controlStage.addActor(infoSection);
