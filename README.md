@@ -33,6 +33,5 @@ developed with <a herf="https://libgdx.badlogicgames.com/">LibGdx</a>
 <p> </p>
 https://www.youtube.com/embed/tImhbrvt-Lk"
 <p></p>
-<p><u> video : glitches caused by the recording program </u></p>
 
 
