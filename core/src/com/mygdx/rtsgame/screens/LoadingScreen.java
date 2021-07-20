@@ -46,7 +46,7 @@ public class LoadingScreen  extends Stage implements Screen {
 
         if(!gameAssetManager.manager.update()){
 
-            progress=gameAssetManager.manager.getProgress();
+            progress = gameAssetManager.manager.getProgress();
             progressBar.rect(10f,Gdx.graphics.getHeight()/2f,(progress*(Gdx.graphics.getWidth()-10f)),2f);
 
         }else{

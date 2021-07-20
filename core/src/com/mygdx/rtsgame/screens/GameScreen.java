@@ -285,7 +285,6 @@ public class GameScreen extends Stage implements Screen , InputProcessor {
 
         for (ArmyUnit u : gameWorld.getArmyUnits()) {
             if (!(u instanceof Building)) {
-
                 if (u.getPlayerId()== gameWorld.currentPlayer ) { //select units with the player id of this game world
                     if (u.hit(touchUp)) {
                         if(u.playerId == gameWorld.currentPlayer) {
